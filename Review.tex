@@ -1,0 +1,112 @@
+\RequirePackage[l2tabu, orthodox]{nag}
+\documentclass[12pt,toc=bibliography,numbers=noendperiod,
+               footnotes=multiple,twoside]{scrartcl}
+\usepackage{fixltx2e} % LaTeX patches, \textsubscript
+\usepackage{microtype}
+\usepackage{cmap} % fix search and cut-and-paste in Acrobat
+\usepackage{ifthen}
+\usepackage[oldstylenums,largesmallcaps,easyscsl]{kpfonts}
+\usepackage[LGR,T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textalpha}
+\usepackage[british]{babel}
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage{bussproofs}
+\usepackage{paralist}
+\usepackage[autocite=footnote,citestyle=authoryear-comp,bibstyle=authoryear,
+            dashed=false,isbn=false,doi=false,backend=biber]{biblatex}
+\usepackage[bookmarks,hidelinks]{hyperref}
+\usepackage[noabbrev,capitalise]{cleveref}
+
+%%% Custom LaTeX preamble
+% serif, non-bold headings:
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+\addtokomafont{pageheadfoot}{\itshape}
+% section numbering up to subsection
+\setcounter{secnumdepth}{2}
+
+% hyperlinks
+\urlstyle{same} % normal text font (alternatives: tt, rm, sf)
+\hypersetup{
+  pdftitle={The Curry-Howard correspondence},
+  pdfauthor={Leonhard Markert (lm510), Emmanuel College}
+}
+\title{The Curry-Howard correspondence}
+\author{Leonhard Markert}
+
+\addbibresource{Bibliography.bib}
+% \pagestyle{headings}
+
+\hyphenation{com-po-nent tran-si-tion-ing}
+
+%%% Body
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+% In order to make automated reasoning possible, we need to represent our propositions and proofs in a way that computers can read and manipulate. Lambda calculi have been used to build such representations with great success. I will review a selection of influential publications on the correspondence between various flavours of the lambda calculus and the propositions and proofs they allow us to represent. I will focus on typed lambda calculi à la Church in this survey.
+
+\section{Early work on type systems and the Curry-Howard correspondence}
+
+William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{explain why it's not an isomorphism}).
+
+Howard starts by noting that the rule which introduces an implication on the right-hand side in the sequent calculus is similar to \(\lambda\)-abstraction, and \emph{modus ponens} (the elimination rule for implication on the right-hand side) resembles application in the \(\lambda\)-calculus.
+
+This simple
+% (positive implicational propositional)
+logic is then extended to include negation as functions with the empty type as their codomain, conjunction as pairing, and disjunction as what would today be called sum types. These corresponding notions from logic and type theory are listed in \cref{tab:howard}. The second part of the essay is concerned with constructing a set-theoretic interpretation of Heyting arithmetic including existential and universal quantifiers.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l l}
+        \toprule
+        \textit{Logic} & \textit{Types} \\
+        \midrule
+	implication & \(\lambda\)-abstraction \\
+	modus ponens & function application \\
+	falsity & functions into the empty type \\
+	conjunction & pairs \\
+	disjunction & sum types \\
+        \bottomrule
+    \end{tabular}
+    \caption{The Curry-Howard correspondence according to Howard \autocite{howard_formulae_as-types_1980}.}
+    \label{tab:howard}
+\end{table}
+
+An alternative perspective on the Curry-Howard correspondence, inspired by category theory, is offered by Joachim Lambek in the same book \autocite{lambek_-calculus_1980}. The analogies that are drawn in this essay are listed in \cref{tab:lambek}. % Via the relation between modus ponens and exponentials in category theory, Lambek shows that it relates to the \enquote{application} or \enquote{evaluation} function in the typed \(\lambda\)-calculus: given a function \(f : a \rightarrow b\) and an object \(a : A\), the application function \(\text{app} : (A \rightarrow B, A) \rightarrow B\) returns an object of type \(B\).
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l l}
+        \toprule
+        \textit{Logic} & \textit{Category theory} \\
+        \midrule
+	reflexivity & identity morphism \\
+	truth & terminal objects \\
+	conjunction & products \\
+	modus ponens & exponentials \\
+        \bottomrule
+    \end{tabular}
+    \caption{Logic from the point of view of category theory}
+    \label{tab:lambek}
+\end{table}
+
+\section{More powerful type systems emerge}
+lala
+
+\section{Uniform formalisations of the Curry-Howard correspondence}
+lala
+
+\section{Recent developments}
+lala
+
+\section{Conclusions}
+lala
+
+\printbibliography
+
+\end{document}
