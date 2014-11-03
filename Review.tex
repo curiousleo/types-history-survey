@@ -50,15 +50,24 @@
 
 % In order to make automated reasoning possible, we need to represent our propositions and proofs in a way that computers can read and manipulate. Lambda calculi have been used to build such representations with great success. I will review a selection of influential publications on the correspondence between various flavours of the lambda calculus and the propositions and proofs they allow us to represent. I will focus on typed lambda calculi à la Church in this survey.
 
+XXX Need to introduce notation here: what is a type, a sort, a type judgement, a context? Also natural deduction primer: entailment, tree structure, axioms and rules.
+
 \section{Early work on type systems and the Curry-Howard correspondence}
 
-William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{explain why it's not an isomorphism}).
+XXX Blurb on Schönfinkel and Church in the 20s and 30s?
+
+William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{XXX explain why it's not an isomorphism}).
 
 Howard starts by noting that the rule which introduces an implication on the right-hand side in the sequent calculus is similar to \(\lambda\)-abstraction, and \emph{modus ponens} (the elimination rule for implication on the right-hand side) resembles application in the \(\lambda\)-calculus.
 
 This simple
 % (positive implicational propositional)
 logic is then extended to include negation as functions with the empty type as their codomain, conjunction as pairing, and disjunction as what would today be called sum types. These corresponding notions from logic and type theory are listed in \cref{tab:howard}. The second part of the essay is concerned with constructing a set-theoretic interpretation of Heyting arithmetic including existential and universal quantifiers.
+
+In the same book that Howard published his notes in, Nicolaas de Bruijn describes his project \enquote{to develop a system of writing entire mathematical theories in such a precise fashion that verification of the correctness can be carried out by formal operations on the text}, with the express intention to have computers verify proofs \autocite{de_bruijn_survey_1980}. The implementation of his Automath system is first motivated by describing how automated proof checking would benefit working mathematicians.
+% it would increase confidence in the results; it would help in understanding proofs by requiring explicit assumptions; and it would allow for proofs to be processed like any other object in computer memory---one could, for example, find out whether a certain axiom or rule was used in a proof.
+
+Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some intuition for what he calls the \enquote{idea of \emph{propositions as types}} as applied to implication: given propositions \(p\) and \(q\), a proof of the implication \(p \rightarrow q\) can be interpreted as a procedure by which a proof of \(q\) is generated for any \(p\) passed to it. Later sections of the report discuss the potential benefits of introducing a proposition sort (\enquote{expression of degree 1}), and the beginnings of what would nowadays be called tactics. Both ideas have been realised in Coq, for example.\footnote{\url{http://coq.inria.fr}}
 
 \begin{table}[h]
     \centering
