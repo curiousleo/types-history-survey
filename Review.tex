@@ -56,6 +56,8 @@ XXX Need to introduce notation here: what is a type, a sort, a type judgement, a
 
 XXX Blurb on Schönfinkel and Church in the 20s and 30s?
 
+\subsection{Howard on the Curry-Howard correspondence}
+
 William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{XXX explain why it's not an isomorphism}).
 
 Howard starts by noting that the rule which introduces an implication on the right-hand side in the sequent calculus is similar to \(\lambda\)-abstraction, and \emph{modus ponens} (the elimination rule for implication on the right-hand side) resembles application in the \(\lambda\)-calculus.
@@ -63,6 +65,8 @@ Howard starts by noting that the rule which introduces an implication on the rig
 This simple
 % (positive implicational propositional)
 logic is then extended to include negation as functions with the empty type as their codomain, conjunction as pairing, and disjunction as what would today be called sum types. These corresponding notions from logic and type theory are listed in \cref{tab:howard}. The second part of the essay is concerned with constructing a set-theoretic interpretation of Heyting arithmetic including existential and universal quantifiers.
+
+\subsection{De Bruijn's Automath project}
 
 In the same book that Howard published his notes in, Nicolaas de Bruijn describes his project \enquote{to develop a system of writing entire mathematical theories in such a precise fashion that verification of the correctness can be carried out by formal operations on the text}, with the express intention to have computers verify proofs \autocite{de_bruijn_survey_1980}. The implementation of his Automath system is first motivated by describing how automated proof checking would benefit working mathematicians.
 % it would increase confidence in the results; it would help in understanding proofs by requiring explicit assumptions; and it would allow for proofs to be processed like any other object in computer memory---one could, for example, find out whether a certain axiom or rule was used in a proof.
@@ -86,8 +90,19 @@ Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some in
     \label{tab:howard}
 \end{table}
 
+
 \section{More powerful type systems emerge}
-A set of notes from a lecture series given by Per Martin-Löf in 1980 is the canonical reference for \emph{intuitionistic type theory} (often referred to as \enquote{Martin-Löf type theory}), on which most of the following work discussed in this survey is based \autocite{sambin_intuitionistic_1984}.
+
+\subsection{Martin-Löf's intuitionistic type theory}
+
+A set of notes from a lecture series given by Per Martin-Löf in 1980 is the canonical reference\footnote{%
+Martin-Löf published several papers on type theory and logic, as did de Bruijn, Coquand, Huet and most other authors whose publications this literature survey discusses. It is clear from the amount of cross-referencing and citing in those papers that the leading researchers at the time were often in close contact, criticising each other's work, finding mistakes or opening up new perspectives---\emph{science} was being done.
+
+This makes untangling the development of the subject \emph{a posteriori} difficult. Martin-Löf developed his type theory over the course of multiple publications spanning decades. \enquote{The} calculus of constructions does not exists; instead, it is a term used by Coquand and Huet to refer to a family of type theories and conceptual programming languages described in at least four papers.
+
+In this survey, I usually cite and describe the latest of such a series of publications on a particular topic by a particular author or set of authors.}
+%
+for \emph{intuitionistic type theory} (often referred to as \enquote{Martin-Löf type theory}), on which most of the following work discussed in this survey is based \autocite{sambin_intuitionistic_1984}.
 
 Before going into type theory proper, Martin-Löf carefully distinguishes \emph{propositions} from \emph{judgements}: propositions are generated from logical operations and held to be true; holding a proposition to be true is to make a judgement. So when \(A\) is a proposition, then \enquote{\(A\) is true} is a judgement. The premisses and conclusion of a logical inference are judgements. As an example, the rule
 
@@ -153,6 +168,20 @@ Considering these from the perspective of logic, formation rules are used to for
     \caption{Symbols defined in Martin-Löf's intuitionistic type theory \parencite{sambin_intuitionistic_1984}.}
     \label{tab:martin-loef}
 \end{table}
+
+\subsection{Coquand and Huet's calculus of constructions}
+
+Coquand and Huet's \emph{calculus of constructions} blends together the theoretical work by Martin-Löf and Girard with the more concrete proposals of de Bruijn \autocite{coquand_calculus_1988}. They first describe the metatheory of the calculus and then provide suggestions concerning how such a calculus could be implemented in a user-friendly way.
+
+In the calculus of constructions, \(*\) represents the universe of all types, that is, the type of all types \emph{and} the type of all propositions. \(*\) is not of type \(*\) to avoid Girard's paradox.\footnote{A judgement like \(* : *\) in a type theory makes it possible to prove any proposition, or equivalently, implies that every type (even \(\bot\)) is inhabited. This finding is usually referred to as \emph{Girard's paradox}, and the publication that is usually cited in this context is his doctoral thesis, \textcite{girard_interpretation_1972} (written in French). Thierry Coquand wrote a very readable introduction to the issue for the Stanford Encyclopia of Philosophy, relating it, amongst others, to Russel's paradox \autocite{coquand_type_2014}.} This differs from the Automath languages, where propositions are of type \texttt{prop}, types are of type \texttt{type} and both \texttt{type} and \texttt{prop} have type \(\tau\).
+
+\emph{Contexts} (Martin-Löf's \enquote{hypothetical judgements}) are defined as \enquote{[t]erms formed solely of products over \(*\) [\dots] They are the types of logical propositions and proposition schemas}. The paper refers to other terms as \emph{objects}.
+
+The core calculus, which resembles Martin-Löf's and also draws inspiration from Girard, is then extended by conversion rules of the form \(\Gamma \vdash M \cong N\) meaning that the terms \(M\) and \(N\) denote the same object (where \(\Gamma\) is a context). It formalises \(\beta\)-conversion at the type level.
+
+An interpretation (or semantics) of terms is given: contexts map to products, for example, and variables to projections picking out the appropriate type from the context. It is then shown that the calculus of constructions is \emph{consistent} in the sense that \enquote{there exists a proposition which is not inhabited.} This non-inhabited proposition or empty type is usually referred to as \(\bot\) (\enquote{bottom}). What this theorem means is that there is no term in the calculus of constructions of type \(\bot\), or alternatively, \emph{false} cannot be derived.
+
+The section concerned with making the calculus of constructions user-friendly makes three concrete proposals: allowing the local definitions (constants) via a \texttt{let} construct; making type arguments which can be inferred from other arguments implicit; and providing a way to extend the syntax of the language. As an example for the last suggestion, a composition operator is introduced as a syntax extension.
 
 \section{Uniform formalisations of the Curry-Howard correspondence}
 lala
