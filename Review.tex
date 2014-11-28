@@ -257,7 +257,7 @@ f A (\texttt{cons}\;A\;x\;l) &= h'_2\;A\;x\;(\texttt{pair}\;l\;(f\;A\;l))
 
 \section{Uniform formalisations of the Curry-Howard correspondence}
 
-\subsection{Barendregt's \(\lambda\)-cube and the \emph{L}-cube}
+\subsection{Barendregt's \(\lambda\)-cube and the logic cube}
 
 In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Barendregt sets out to uniformly describe eight type systems, with the calculus of constructions the most powerful of all. The result is the \(\lambda\)-cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the \(\lambda\)-cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
 
@@ -274,35 +274,22 @@ In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} i
 \label{fig:lambda-cube}
 \end{figure}
 
-\begin{figure}
-\begin{equation*}
-\xymatrix@R46pt@C16pt{%
-&PROP\omega\ar@{->}[rr]&&PRED\omega \\
-PROP2\ar@{->}[rr]\ar@{->}[ur]&&PRED2\ar@{->}[ur] \\
-&PROP\underline{\omega}\ar@{->}[uu]|!{"2,1";"2,3"}\hole\ar@{->}[rr]|!{"4,3";"2,3"}\hole&&PRED\underline{\omega}\ar@{->}[uu] \\
-PROP\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&PRED\ar@{->}[uu]\ar@{->}[ur]
-}
-\end{equation*}
-\caption{The \emph{L}-cube.}
-\label{fig:l-cube}
-\end{figure}
-
 \begin{table}[h]
     \centering
-    \begin{tabularx}{\linewidth}{l X}
+    \begin{tabular}{l l}
         \toprule
         \textit{Label} & \textit{Also known as} \\
         \midrule
         \(\lambda^{\rightarrow}\) & Simply typed \(\lambda\)-calculus (Church) \\
-        \(\lambda2\) & Polymorphic (or second-order) \(\lambda\)-calculus or \emph{Système F} (Girard) \\
+        \(\lambda2\) & Polymorphic \(\lambda\)-calculus or \emph{Système F} (Girard) \\
         \(\lambda\omega\) & \emph{Système F\(\omega\)} (Girard) \\
-        \(\lambda P\) & LF (Harper) and systems in the Automath family (de Bruijn) \\
-        \(\lambda P2\) & Known under the same name (Longo and Moggi) \\
-        \(\lambda C = \lambda P\omega\) & Variant of the calculus of constructions (Coquand and Huet) \\
-        \(\lambda\underline{\omega}\) (\enquote{weak} \(\lambda\omega\)) & Related to a system studied by Renardel de Lavalette \\
+        \(\lambda P\) & \emph{LF} (Harper) and Automath languages (de Bruijn) \\
+        \(\lambda P2\) & Studied by Longo and Moggi \\
+        \(\lambda C = \lambda P\omega\) & Calculus of constructions (Coquand and Huet) \\
+        \(\lambda\underline{\omega}\) (\enquote{weak} \(\lambda\omega\)) & Related to a system studied by de Lavalette \\
         \(\lambda P\underline{\omega}\) (\enquote{weak} \(\lambda P\omega\)) & --- \\
         \bottomrule
-    \end{tabularx}
+    \end{tabular}
     \caption{Other names for the type systems in the \(\lambda\)-cube. Summary based on \textcite[193]{barendregt_lambda_1992}.}
     \label{tab:lambda-cube-type-systems}
 \end{table}
@@ -426,6 +413,47 @@ There are general rules which apply to all systems and the specific rules called
     \caption{Axiom and typing judgements of the \(\lambda\)-cube.}
     \label{fig:lambda-cube-typing}
 \end{figure}
+
+% \((\square, *)\) is impredicative
+
+The description of the \(\lambda\)-cube is followed by many examples of what kinds of expressions are admissible in its type systems. Next, the \emph{logic cube} is introduced (\cref{fig:l-cube}): it contains eight systems of intuitionistic logic, each corresponding to the type system at the same corner in the \(\lambda\)-cube. Again, the naming scheme is non-standard so a short description of each logic is provided (\cref{tab:l-cube-names}).
+
+\enquote{Weakly higher-order logics} have variables for higher-order propositions or predicates but no quantification over them. Again, the edges of the cube represent inclusion.
+
+The correspondence between the two cubes is a generalised version of the Curry-Howard interpretation: each formula \(A\) in logic \(L_i\) on the logic cube can be interpreted as a type \(\llbracket A \rrbracket\) in the corresponding system \(\lambda_i\) on the \(\lambda\)-cube. If \(A\) is provable in \(L_i\) then \(\llbracket A \rrbracket\) is inhabited in \(\lambda_i\) (soundness).\footnote{Barendregt quotes Geuvers' Master thesis from 1988 for this result. Unfortunately I was unable to track it down.}
+
+\begin{figure}
+\begin{equation*}
+\xymatrix@R46pt@C16pt{%
+&PROP\omega\ar@{->}[rr]&&PRED\omega \\
+PROP2\ar@{->}[rr]\ar@{->}[ur]&&PRED2\ar@{->}[ur] \\
+&PROP\underline{\omega}\ar@{->}[uu]|!{"2,1";"2,3"}\hole\ar@{->}[rr]|!{"4,3";"2,3"}\hole&&PRED\underline{\omega}\ar@{->}[uu] \\
+PROP\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&PRED\ar@{->}[uu]\ar@{->}[ur]
+}
+\end{equation*}
+\caption{The logic cube.}
+\label{fig:l-cube}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l l}
+        \toprule
+        \textit{Label} & \textit{Description} \\
+        \midrule
+        PROP & Propositional logic \\
+        PROP2 & Second-order propositional logic \\
+        PROP\(\underline{\omega}\) & Weakly higher-order propositional logic \\
+        PROP\(\omega\) & Higher-order propositional logic \\
+        PRED & Predicate logic \\
+        PRED2 & Second-order predicate logic \\
+        PRED\(\underline{\omega}\) & Weakly higher-order predicate logic \\
+        PRED\(\omega\) & Higher-order predicate logic \\
+        \bottomrule
+    \end{tabular}
+    \caption{The logics in the logic cube. Taken from \textcite[248]{barendregt_lambda_1992}.}
+    \label{tab:l-cube-names}
+\end{table}
 
 
 \subsection{Pure type systems}
