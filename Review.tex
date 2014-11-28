@@ -11,7 +11,11 @@
 \usepackage{textalpha}
 \usepackage[british]{babel}
 \usepackage{csquotes}
+\usepackage{alltt}
+\usepackage{subcaption}
+\usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage[all]{xy}
 \usepackage{bussproofs}
 \usepackage{paralist}
 \usepackage[autocite=footnote,citestyle=authoryear-comp,bibstyle=authoryear,
@@ -29,7 +33,7 @@
 
 % hyperlinks
 \urlstyle{same} % normal text font (alternatives: tt, rm, sf)
-\hypersetup{
+\hypersetup{%
   pdftitle={The Curry-Howard correspondence},
   pdfauthor={Leonhard Markert (lm510), Emmanuel College}
 }
@@ -46,13 +50,17 @@
 
 \maketitle
 
+\abstract{XXX}
+
+\tableofcontents
+
 \section{Introduction}
 
 % In order to make automated reasoning possible, we need to represent our propositions and proofs in a way that computers can read and manipulate. Lambda calculi have been used to build such representations with great success. I will review a selection of influential publications on the correspondence between various flavours of the lambda calculus and the propositions and proofs they allow us to represent. I will focus on typed lambda calculi à la Church in this survey.
 
 XXX Need to introduce notation here: what is a type, a sort, a type judgement, a context? Also natural deduction primer: entailment, tree structure, axioms and rules.
 
-\section{Early work on type systems and the Curry-Howard correspondence}
+\section{Early work on types and the Curry-Howard correspondence}
 
 XXX Blurb on Schönfinkel and Church in the 20s and 30s?
 
@@ -123,7 +131,7 @@ implicitly assumes that \(A\) and \(B\) are propositions, and states that we can
 \emph{Types} are then introduced using the following four judgements:
 
 \begin{enumerate}
-\item \(A\) is a set/type (in the notes this is written as \(A\) set). Sets/types are defined by describing how their canonical elements are formed and what equality of elements means in this set/type.
+\item \(A\) is a set/type (in the notes this is written as \(A\) set). Sets/types are defined by describing how their canonical elements (\emph{values} in modern \(\lambda\)-calculus terminology) are formed and what equality of elements means in this set/type.
 \item \(A\) and \(B\) are equal sets/types (\(A = B\)). \(A\) and \(B\) are equal if \(a : A\) entails \(a : B\) and \(a = b : A\) entails \(a = b : B\) and vice versa.
 \item \(a\) is an element of the set/type \(A\) (written \(a \in A\) in the notes; we also use \(a : A\) here). This means that \(a\) is a \enquote{method (or program), which, when executed, yields a canonical element of \(A\) as a result.}
 \item \(a\) and \(b\) are equal elements of the set/type \(A\) (written \(a = b \in A\) or \(a = b : A\)). For this to hold, \(a\) and \(b\) must yield equal canonical elements of \(A\) when executed.
@@ -173,7 +181,7 @@ Considering these from the perspective of logic, formation rules are used to for
 
 Coquand and Huet's \emph{calculus of constructions} blends together the theoretical work by Martin-Löf and Girard with the more concrete proposals of de Bruijn \autocite{coquand_calculus_1988}. They first describe the metatheory of the calculus and then provide suggestions concerning how such a calculus could be implemented in a user-friendly way.
 
-In the calculus of constructions, \(*\) represents the universe of all types, that is, the type of all types \emph{and} the type of all propositions. \(*\) is not of type \(*\) to avoid Girard's paradox.\footnote{A judgement like \(* : *\) in a type theory makes it possible to prove any proposition, or equivalently, implies that every type (even \(\bot\)) is inhabited. This finding is usually referred to as \emph{Girard's paradox}, and the publication that is usually cited in this context is his doctoral thesis, \textcite{girard_interpretation_1972} (written in French). Thierry Coquand wrote a very readable introduction to the issue for the Stanford Encyclopedia of Philosophy, relating it, amongst others, to Russel's paradox \autocite{coquand_type_2014}. Coq and Agda avoid Girard's paradox via an infinite hierarchy of types---an approach that closely resembles Grothendieck's solution to similar issues in set theory by introducing what are now called \emph{Grothendieck universes} \autocite{artin_orie_1972}.} This differs from the Automath languages, where propositions are of type \texttt{prop}, types are of type \texttt{type} and both \texttt{type} and \texttt{prop} have type \(\tau\).
+In the calculus of constructions, \(*\) represents the universe of all types, that is, the type of all types \emph{and} the type of all propositions. \(*\) is not of type \(*\) to avoid Girard's paradox.\footnote{A judgement like \(* : *\) in a type theory makes it possible to prove any proposition, or equivalently, implies that every type (even \(\bot\)) is inhabited. An early version of Martin-Löf's type theory was shown to suffer from this problem, usually referred to as \emph{Girard's paradox}, and the publication that is usually cited in this context is his doctoral thesis, \textcite{girard_interpretation_1972} (written in French). Thierry Coquand wrote a very readable introduction to the issue for the Stanford Encyclopedia of Philosophy, relating it, amongst others, to Russel's paradox \autocite{coquand_type_2014}. Coq and Agda avoid Girard's paradox via an infinite hierarchy of types---an approach that closely resembles Grothendieck's solution to similar issues in set theory by introducing what are now called \emph{Grothendieck universes} \autocite{artin_orie_1972}.} This differs from the Automath languages, where propositions are of type \texttt{prop}, types are of type \texttt{type} and both \texttt{type} and \texttt{prop} have type \(\tau\).
 
 \emph{Contexts} (Martin-Löf's \enquote{hypothetical judgements}) are defined as \enquote{[t]erms formed solely of products over \(*\) [\dots] They are the types of logical propositions and proposition schemas}. The paper refers to other terms as \emph{objects}.
 
@@ -183,8 +191,139 @@ An interpretation (or semantics) of terms is given: contexts map to products, fo
 
 The section concerned with making the calculus of constructions user-friendly makes three concrete proposals: allowing the local definitions (constants) via a \texttt{let} construct; making type arguments which can be inferred from other arguments implicit; and providing a way to extend the syntax of the language. As an example for the last suggestion, a composition operator is introduced as a syntax extension.
 
+
+\subsection{Luo's extended calculus of constructions}
+
+The \emph{extended calculus of constructions} (ECC), first presented by Zhaohui Luo in 1989\autocite{luo_ecc_1989}, expanded upon in his PhD thesis\autocite{luo_extended_1990} and used as the basis for his unified type theory in \citetitle{luo_computation_1994}\autocite{luo_computation_1994}, adds \(\Sigma\)-types to the calculus of constructions to provide an abstraction mechanism.
+
+After listing the inference rules of ECC, demonstrating its proof-theoretic properties and giving an intuitionistic set-theoretic semantics, Luo discusses the pragmatics of ECC: expressing and structuring mathematical theories. The example given in \textcite{luo_ecc_1989} is a theory of rings. A simpler example, which we will use here, is given in \textcite{luo_extended_1990}: semigroups (defined as a carrier set closed under an associative binary operation \(\_\cdot\_\)).
+
+A straightforward way of formalising semigroups would be to define a context \(\Gamma_{sg} \triangleq X : \textrm{Type}_0, \_\cdot\_ : X \rightarrow X \rightarrow X, p : P_\textrm{assoc}\), where \(P_\textrm{assoc} \triangleq \Pi x,y,z:X.(x \cdot (y \cdot z) = (x \cdot y) \cdot z)\) represents associativity of the binary operation. Luo observes that expressing theories in this way quickly becomes unwieldy.
+
+Instead, he proposes to use \(\Sigma\)-types to represent theories in an abstract manner. An \emph{abstract} theory of semigroups would consists of two parts:\footnote{This presentation of semigroup theory is taken directly from \textcite[100]{luo_extended_1990}.}
+
+\begin{itemize}
+\item an (abstract) \emph{signature presentation} \[\textrm{Sig}_{sg} \triangleq \Sigma X : \textrm{Type}_0. X \rightarrow X \rightarrow X\]
+\item an (abstract) \emph{axiom} \(\textrm{Ax}_{sg}\) being a predicate over \(\textrm{Sig}_{sg}\) which, when given any structure \(s\) of type \(\textrm{Sig}_{sg}\), returns its associativity axiom.
+\end{itemize}
+
+The signature presentation and the axiom can be packaged together as \[\textrm{Mod}_{sg} \triangleq \Sigma s : \textrm{Sig}_{sg}. \textrm{Ax}_{sg}(s)\] which then represents a complete abstract theory of semigroups. In order to postulate an arbitrary semigroup, one just assumes a context \(\Gamma'_{sg} \triangleq sg : \textrm{Mod}_{sg}\).
+
+Theorems over any semigroup (abstract theorems) then constitute a predicate \(\textrm{Thm}_{sg}\) over \(\textrm{Sig}_{sg}\) with the general form \[\textrm{Thm}_{sg} \triangleq \lambda s : \textrm{Sig}_{sg}. P_1 \wedge P_2 \wedge \dots \wedge P_n\] where \(P_1\) to \(P_n\) are the types corresponding to the theorems that have been proved. Given any concrete semigroup structure, \(\textrm{Prf}_{sg}\), a term of type \(\Pi sg : \textrm{Mod}_{sg}. \textrm{Thm}_{sg}(\pi_1(sg))\), results in the proofs specialised to that particular semigroup structure.
+
+\subsection{Pfenning and Paulin-Mohring's calculus of inductive constructions}
+
+\textcite{pfenning_inductively_1990} extends the calculus of constructions with inductively defined types---an extension which, interestingly, does not augment its computational capabilities, it only makes the proof language more powerful.
+
+A short introduction to the calculus of constructions is given before defining the syntax for inductively defined types. Many examples follow, including a definition of natural numbers (see \cref{fig:nat-inductive-type}) and lists (see \cref{fig:list-inductive-type}).
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}[t]{0.3\textwidth}
+\begin{alltt}
+\textbf{indtype} nat : * with
+    \textbf{zero} : nat
+    \textbf{succ} : nat \(\rightarrow\) nat
+end
+\end{alltt}
+\end{subfigure}
+\caption{Natural numbers in the calculus of inductive constructions.}
+\label{fig:nat-inductive-type}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}[t]{0.4\textwidth}
+\begin{alltt}
+\textbf{indtype} list : * \(\rightarrow\) * with
+    \textbf{nil}  : [A : *] list A
+    \textbf{cons} : [A : *] A \(\rightarrow\) list A \(\rightarrow\) list A
+end
+\end{alltt}
+\end{subfigure}
+\caption{Lists in the calculus of inductive constructions.}
+\label{fig:list-inductive-type}
+\end{figure}
+
+The definition of an inductive type \(\alpha\) can be thought of as a rule for \(\alpha\)-introduction. The corresponding \(\alpha\)-elimination is done via \emph{primitive recursion over \(\alpha\)}, or what is usually called pattern matching in functional programming languages. The schema for lists, for example, is given by
+
+\begin{align*}
+f A (\texttt{nil}\;A) &= h'_1\;A \\
+f A (\texttt{cons}\;A\;x\;l) &= h'_2\;A\;x\;(\texttt{pair}\;l\;(f\;A\;l))
+\end{align*}
+
+
 \section{Uniform formalisations of the Curry-Howard correspondence}
-lala
+
+\subsection{Barendregt's \(\lambda\)-cube and the \emph{L}-cube}
+
+In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Barendregt sets out to uniformly describe eight type systems, with the calculus of constructions the most powerful of all. The result is the \(\lambda\)-cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the \(\lambda\)-cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
+
+\begin{figure}
+\begin{equation*}
+\xymatrix@R55pt@C50pt{%
+&\lambda\omega\ar@{->}[rr]&&\lambda C \\
+\lambda 2\ar@{->}[rr]\ar@{->}[ur]&&\lambda P2\ar@{->}[ur] \\
+&\lambda\underline{\omega}\ar@{->}[uu]|!{"2,1";"2,3"}\hole\ar@{->}[rr]|!{"4,3";"2,3"}\hole&&\lambda P\underline{\omega}\ar@{->}[uu] \\
+\lambda\rightarrow\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&\lambda P\ar@{->}[uu]\ar@{->}[ur]
+}
+\end{equation*}
+\caption{The \(\lambda\)-cube.}
+\label{fig:lambda-cube}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \begin{tabularx}{\textwidth}{l X}
+        \toprule
+        \textit{Label} & \textit{Also known as} \\
+        \midrule
+        \(\lambda\rightarrow\) & simply typed \(\lambda\)-calculus (Church) \\
+        \(\lambda2\) & polymorphic (or second-order) \(\lambda\)-calculus or \emph{Système F} (Girard) \\
+        \(\lambda\omega\) & \emph{Système F\(\omega\)} (Girard) \\
+        \(\lambda P\) & LF (Harper) and systems in the Automath family (de Bruijn) \\
+        \(\lambda P2\) & known under the same name (Longo and Moggi) \\
+        \(\lambda C = \lambda P\omega\) & a version of the calculus of constructions (Coquand and Huet) \\
+        \(\lambda\underline{\omega}\) (\enquote{weak} \(\lambda\omega\)) & related to a system studied by Renardel de Lavalette \\
+        \(\lambda P\underline{\omega}\) (\enquote{weak} \(\lambda P\omega\)) & --- \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Other names for the type systems in the \(\lambda\)-cube. Summary based on \textcite[193]{barendregt_lambda_1992}.}
+    \label{tab:lambda-cube-type-systems}
+\end{table}
+
+A key insight in this uniform description of type systems is the mutual dependence of types and terms: there are
+
+\begin{itemize}
+\item terms depending on terms;
+\item terms depending on types;
+\item types depending on types;
+\item types depending on terms (dependent types).
+\end{itemize}
+
+Barendregt starts by defining the systems \(\lambda\rightarrow\), \(\lambda2\), \(\lambda\underline{\omega}\) and \(\lambda P\) in the usual way. Then the general typing judgements of the \(\lambda\)-cube are presented.
+
+\begin{figure}
+    \begin{prooftree}
+        \AxiomC{\(A\)}
+        \AxiomC{\(B\)}
+        \AxiomC{\(A\) true}
+        \TrinaryInfC{\(A \vee B\) true}
+    \end{prooftree}
+    \begin{prooftree}
+        \AxiomC{\(A\)}
+        \AxiomC{\(B\)}
+        \AxiomC{\(A\) true}
+        \TrinaryInfC{\(A \vee B\) true}
+    \end{prooftree}
+    \caption{Axiom and typing judgements of the \(\lambda\)-cube.}
+    \label{fig:lambda-cube-typing}
+\end{figure}
+
+
+\subsection{Pure type systems}
+
+XXX
 
 \section{Recent developments}
 lala
