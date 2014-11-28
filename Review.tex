@@ -12,12 +12,14 @@
 \usepackage[british]{babel}
 \usepackage{csquotes}
 \usepackage{alltt}
+\usepackage{mathtools}
 \usepackage{subcaption}
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage[all]{xy}
 \usepackage{bussproofs}
 \usepackage{paralist}
+\usepackage{amssymb}
 \usepackage[autocite=footnote,citestyle=authoryear-comp,bibstyle=authoryear,
             dashed=false,isbn=false,doi=false,backend=biber]{biblatex}
 \usepackage[bookmarks,hidelinks]{hyperref}
@@ -219,7 +221,7 @@ A short introduction to the calculus of constructions is given before defining t
 
 \begin{figure}[h]
 \centering
-\begin{subfigure}[t]{0.3\textwidth}
+\begin{subfigure}[t]{0.3\linewidth}
 \begin{alltt}
 \textbf{indtype} nat : * with
     \textbf{zero} : nat
@@ -233,7 +235,7 @@ end
 
 \begin{figure}[h]
 \centering
-\begin{subfigure}[t]{0.4\textwidth}
+\begin{subfigure}[t]{0.4\linewidth}
 \begin{alltt}
 \textbf{indtype} list : * \(\rightarrow\) * with
     \textbf{nil}  : [A : *] list A
@@ -261,24 +263,37 @@ In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} i
 
 \begin{figure}
 \begin{equation*}
-\xymatrix@R44pt@C40pt{%
+\xymatrix@R46pt@C40pt{%
 &\lambda\omega\ar@{->}[rr]&&\lambda C \\
 \lambda 2\ar@{->}[rr]\ar@{->}[ur]&&\lambda P2\ar@{->}[ur] \\
 &\lambda\underline{\omega}\ar@{->}[uu]|!{"2,1";"2,3"}\hole\ar@{->}[rr]|!{"4,3";"2,3"}\hole&&\lambda P\underline{\omega}\ar@{->}[uu] \\
-\lambda\rightarrow\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&\lambda P\ar@{->}[uu]\ar@{->}[ur]
+\lambda^{\rightarrow}\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&\lambda P\ar@{->}[uu]\ar@{->}[ur]
 }
 \end{equation*}
 \caption{The \(\lambda\)-cube.}
 \label{fig:lambda-cube}
 \end{figure}
 
+\begin{figure}
+\begin{equation*}
+\xymatrix@R46pt@C16pt{%
+&PROP\omega\ar@{->}[rr]&&PRED\omega \\
+PROP2\ar@{->}[rr]\ar@{->}[ur]&&PRED2\ar@{->}[ur] \\
+&PROP\underline{\omega}\ar@{->}[uu]|!{"2,1";"2,3"}\hole\ar@{->}[rr]|!{"4,3";"2,3"}\hole&&PRED\underline{\omega}\ar@{->}[uu] \\
+PROP\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&PRED\ar@{->}[uu]\ar@{->}[ur]
+}
+\end{equation*}
+\caption{The \emph{L}-cube.}
+\label{fig:l-cube}
+\end{figure}
+
 \begin{table}[h]
     \centering
-    \begin{tabularx}{\textwidth}{l X}
+    \begin{tabularx}{\linewidth}{l X}
         \toprule
         \textit{Label} & \textit{Also known as} \\
         \midrule
-        \(\lambda\rightarrow\) & Simply typed \(\lambda\)-calculus (Church) \\
+        \(\lambda^{\rightarrow}\) & Simply typed \(\lambda\)-calculus (Church) \\
         \(\lambda2\) & Polymorphic (or second-order) \(\lambda\)-calculus or \emph{Système F} (Girard) \\
         \(\lambda\omega\) & \emph{Système F\(\omega\)} (Girard) \\
         \(\lambda P\) & LF (Harper) and systems in the Automath family (de Bruijn) \\
@@ -301,41 +316,111 @@ A key insight in this uniform description of type systems is the mutual dependen
 \item types depending on terms (dependent types).
 \end{itemize}
 
-Barendregt starts by defining the systems \(\lambda\rightarrow\), \(\lambda2\), \(\lambda\underline{\omega}\) and \(\lambda P\) in the usual way. Then the general typing judgements of the \(\lambda\)-cube are presented.
+Barendregt starts by defining the systems \(\lambda^{\rightarrow}\), \(\lambda2\), \(\lambda\underline{\omega}\) and \(\lambda P\) in the usual way. Then a general treatment of all systems in the \(\lambda\)-cube is presented. We summarise it here:
+
+\begin{enumerate}
+\item The systems of the \(\lambda\)-cube have the following abstract syntax: \[\mathcal{T} = V \;|\; C \;|\; \mathcal{T}\mathcal{T} \;|\; \lambda V\!\!:\!\mathcal{T}\!.\mathcal{T} \;|\; \Pi V\!\!:\!\mathcal{T}\!.\mathcal{T}\] where \(V\) and \(C\) stand for variables and constants, respectively. Note that no distinction between type- and term-variables is made.
+\item \(\beta\)-reduction is defined by the contraction rule \[(\lambda x:A.B)C \rightarrow B[x \coloneqq C]\]
+\item Contexts are finite ordered sequences of declarations \(x:A\), where \(A \in \mathcal{T}\) and \(x\) a variable. The empty context is written \(<>\).
+\item The typing judgements (see \cref{fig:lambda-cube-typing}) axiomatise the notion \[\Gamma \vdash A:B\] stating that \(A:B\) can be derived from context \(\Gamma\). Note that \(A \rightarrow B \equiv \Pi x:A.B\) if \(x\) does not appear free in either \(A\) or \(B\).
+
+There are general rules which apply to all systems and the specific rules called \((s_1, s_2)\) rules. In the following, \(s\), \(s_1\) and \(s_2\) range over the set of \emph{sorts}, \(\mathcal{S} \triangleq \{*, \square\}\).
+\item The systems of the \(\lambda\)-cube are then defined by instantiating the \((s_1, s_2)\) rules with a subset of \(\{(*,*), (\square, *), (*,\square), (\square, \square)\}\) as in \cref{tab:lambda-cube-s-rules}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l l l l l}
+        \toprule
+        \textit{System} & \multicolumn{4}{l}{\textit{Specific rules}}  \\
+        \midrule
+        \(\lambda^{\rightarrow}\) & \((*,*)\) & & & \\
+        \(\lambda2\) & \((*,*)\) & \((\square, *)\) & & \\
+        \(\lambda P\) & \((*,*)\) & & \((*,\square)\) & \\
+
+        \(\lambda P2\) & \((*,*)\) & \((\square, *)\) & \((*,\square)\) & \\
+
+        \(\lambda\underline{\omega}\) & \((*,*)\) & & & \((\square, \square)\) \\
+
+        \(\lambda\omega\) & \((*,*)\) & \((\square, *)\) & & \((\square, \square)\) \\
+
+        \(\lambda P\underline{\omega}\) & \((*,*)\) & & \((*,\square)\) & \((\square, \square)\) \\
+
+        \(\lambda P\omega = \lambda C\) & \((*,*)\) & \((\square, *)\) & \((*,\square)\) & \((\square, \square)\) \\
+
+        \bottomrule
+    \end{tabular}
+    \caption{Specific rules for the systems of the \(\lambda\)-cube. Table taken from \textcite[205]{barendregt_lambda_1992}.}
+    \label{tab:lambda-cube-s-rules}
+\end{table}
+\end{enumerate}
 
 \begin{figure}
     \centering
     \begin{minipage}[b]{.3\linewidth}
         \begin{prooftree}
-            \AxiomC{\(A\)}
-            \AxiomC{\(B\)}
-            \AxiomC{\(A\) true}
-            \TrinaryInfC{\(A \vee B\) true}
+            \AxiomC{}
+            \LeftLabel{(axiom)}
+            \UnaryInfC{\(<>\;\vdash * : \square\)}
         \end{prooftree}
     \end{minipage}
     \begin{minipage}[b]{.3\linewidth}
         \begin{prooftree}
-            \AxiomC{\(A\)}
-            \AxiomC{\(B\)}
-            \AxiomC{\(A\) true}
-            \TrinaryInfC{\(A \vee B\) true}
+            \AxiomC{\(\Gamma \vdash A : s\)}
+            \LeftLabel{(start)}
+            \RightLabel{\(x \notin \Gamma\)}
+            \UnaryInfC{\(\Gamma,x:A \vdash x:A\)}
         \end{prooftree}
     \end{minipage}
     \\
-    \begin{minipage}[b]{.3\linewidth}
+    \vspace{10pt}
+    \begin{minipage}[b]{.5\linewidth}
         \begin{prooftree}
-            \AxiomC{\(A\)}
-            \AxiomC{\(B\)}
-            \AxiomC{\(A\) true}
-            \TrinaryInfC{\(A \vee B\) true}
+            \AxiomC{\(\Gamma \vdash A:B\)}
+            \AxiomC{\(\Gamma \vdash C:s\)}
+            \LeftLabel{(weakening)}
+            \RightLabel{\(x \notin \Gamma\)}
+            \BinaryInfC{\(\Gamma,x:C \vdash A:B\)}
         \end{prooftree}
     \end{minipage}
-    \begin{minipage}[b]{.3\linewidth}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.5\linewidth}
         \begin{prooftree}
-            \AxiomC{\(A\)}
-            \AxiomC{\(B\)}
-            \AxiomC{\(A\) true}
-            \TrinaryInfC{\(A \vee B\) true}
+            \AxiomC{\(\Gamma \vdash F:(\Pi x:A.B)\)}
+            \AxiomC{\(\Gamma \vdash a:A\)}
+            \LeftLabel{(application)}
+            \BinaryInfC{\(\Gamma \vdash F a:B[x \coloneqq a]\)}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.5\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(\Gamma,x:A \vdash b:B\)}
+            \AxiomC{\(\Gamma \vdash (\Pi x:A.B):s\)}
+            \LeftLabel{(abstraction)}
+            \BinaryInfC{\(\Gamma \vdash (\lambda x:A.b):(\Pi x:A.B)\)}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.5\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(\Gamma \vdash A:B\)}
+            \AxiomC{\(\Gamma \vdash B':s\)}
+            \AxiomC{\(B =_\beta B'\)}
+            \LeftLabel{(conversion)}
+            \TrinaryInfC{\(\Gamma \vdash A:B'\)}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.5\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(\Gamma \vdash A:s_1\)}
+            \AxiomC{\(\Gamma,x:A \vdash B:s_2\)}
+            \LeftLabel{(\((s_1, s_2)\) rule)}
+            \BinaryInfC{\(\Gamma \vdash (\Pi x:A.B):s_2\)}
         \end{prooftree}
     \end{minipage}
     \caption{Axiom and typing judgements of the \(\lambda\)-cube.}
