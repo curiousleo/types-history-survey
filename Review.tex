@@ -261,7 +261,7 @@ In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} i
 
 \begin{figure}
 \begin{equation*}
-\xymatrix@R55pt@C50pt{%
+\xymatrix@R44pt@C40pt{%
 &\lambda\omega\ar@{->}[rr]&&\lambda C \\
 \lambda 2\ar@{->}[rr]\ar@{->}[ur]&&\lambda P2\ar@{->}[ur] \\
 &\lambda\underline{\omega}\ar@{->}[uu]|!{"2,1";"2,3"}\hole\ar@{->}[rr]|!{"4,3";"2,3"}\hole&&\lambda P\underline{\omega}\ar@{->}[uu] \\
@@ -278,13 +278,13 @@ In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} i
         \toprule
         \textit{Label} & \textit{Also known as} \\
         \midrule
-        \(\lambda\rightarrow\) & simply typed \(\lambda\)-calculus (Church) \\
-        \(\lambda2\) & polymorphic (or second-order) \(\lambda\)-calculus or \emph{Système F} (Girard) \\
+        \(\lambda\rightarrow\) & Simply typed \(\lambda\)-calculus (Church) \\
+        \(\lambda2\) & Polymorphic (or second-order) \(\lambda\)-calculus or \emph{Système F} (Girard) \\
         \(\lambda\omega\) & \emph{Système F\(\omega\)} (Girard) \\
         \(\lambda P\) & LF (Harper) and systems in the Automath family (de Bruijn) \\
-        \(\lambda P2\) & known under the same name (Longo and Moggi) \\
-        \(\lambda C = \lambda P\omega\) & a version of the calculus of constructions (Coquand and Huet) \\
-        \(\lambda\underline{\omega}\) (\enquote{weak} \(\lambda\omega\)) & related to a system studied by Renardel de Lavalette \\
+        \(\lambda P2\) & Known under the same name (Longo and Moggi) \\
+        \(\lambda C = \lambda P\omega\) & Variant of the calculus of constructions (Coquand and Huet) \\
+        \(\lambda\underline{\omega}\) (\enquote{weak} \(\lambda\omega\)) & Related to a system studied by Renardel de Lavalette \\
         \(\lambda P\underline{\omega}\) (\enquote{weak} \(\lambda P\omega\)) & --- \\
         \bottomrule
     \end{tabularx}
@@ -304,18 +304,40 @@ A key insight in this uniform description of type systems is the mutual dependen
 Barendregt starts by defining the systems \(\lambda\rightarrow\), \(\lambda2\), \(\lambda\underline{\omega}\) and \(\lambda P\) in the usual way. Then the general typing judgements of the \(\lambda\)-cube are presented.
 
 \begin{figure}
-    \begin{prooftree}
-        \AxiomC{\(A\)}
-        \AxiomC{\(B\)}
-        \AxiomC{\(A\) true}
-        \TrinaryInfC{\(A \vee B\) true}
-    \end{prooftree}
-    \begin{prooftree}
-        \AxiomC{\(A\)}
-        \AxiomC{\(B\)}
-        \AxiomC{\(A\) true}
-        \TrinaryInfC{\(A \vee B\) true}
-    \end{prooftree}
+    \centering
+    \begin{minipage}[b]{.3\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(A\)}
+            \AxiomC{\(B\)}
+            \AxiomC{\(A\) true}
+            \TrinaryInfC{\(A \vee B\) true}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}[b]{.3\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(A\)}
+            \AxiomC{\(B\)}
+            \AxiomC{\(A\) true}
+            \TrinaryInfC{\(A \vee B\) true}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \begin{minipage}[b]{.3\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(A\)}
+            \AxiomC{\(B\)}
+            \AxiomC{\(A\) true}
+            \TrinaryInfC{\(A \vee B\) true}
+        \end{prooftree}
+    \end{minipage}
+    \begin{minipage}[b]{.3\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(A\)}
+            \AxiomC{\(B\)}
+            \AxiomC{\(A\) true}
+            \TrinaryInfC{\(A \vee B\) true}
+        \end{prooftree}
+    \end{minipage}
     \caption{Axiom and typing judgements of the \(\lambda\)-cube.}
     \label{fig:lambda-cube-typing}
 \end{figure}
