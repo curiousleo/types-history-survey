@@ -742,6 +742,76 @@ As an example, Peirce's law \(((p \rightarrow q) \rightarrow p) \rightarrow p\) 
 Proofs of subject reduction, confluence and strong normalisation follow. The chapter concludes by describing an embedding of classical propositional logic in intuitionistic propositional logic (Kolmogorov double negation translation), continuation passing style (CPS) translation and extensions of the logic with more introduction and elimination rules.
 
 
+\subsection{Intuitionistic modal logic}
+
+The correspondence between intuitionistic modal logic and the \(\lambda\)-calculus was already mentioned in \textcite{curry_elimination_1952}. This connection was re-evaluated much later in a number of papers in the late 1990s and early 200s---\textcite{paiva_modalities_2004} provides a good overview with many references. The paper I will concentrate on in this section is \textcite{benton_computational_1995}, which demonstrates the correspondence between the computational \(\lambda\)-calculus \autocite{moggi_notions_1991} and an intuitionistic modal propositional logic.
+
+The computational \(\lambda\)-calculus is introduced by giving its additional \(\beta\)-reduction rules:
+
+\begin{align*}
+\texttt{let}\; x \Leftarrow (\texttt{val}(e)) \;\texttt{in}\; f &\rightarrow_\beta f[e/x] \\
+\texttt{let}\; x \Leftarrow e \;\texttt{in}\; (\texttt{val}(x)) &\rightarrow_\beta e \\
+\texttt{let}\; x' \Leftarrow (\texttt{let}\; x \Leftarrow e \;\texttt{in}\; f) \;\texttt{in}\; g &\rightarrow_\beta \;\texttt{let}\; x \Leftarrow e \;\texttt{in}\; (\texttt{let}\; x' \Leftarrow f \;\texttt{in}\; g)
+\end{align*}
+
+Next the typing rules for the calculus are presented. In addition to the standard axiom as well as introduction and elimination rules for functions, pairs and sums, it contains the axiom \(\Gamma \vdash * : 1\) and the following rules for typing monadic computations in the strong monad \(T\):
+
+\begin{figure}[h]
+\begin{minipage}[b]{1\linewidth}
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+\begin{prooftree}
+    \AxiomC{\(\Gamma \vdash e : T\,A\)}
+    \AxiomC{\(\Gamma,x:A \vdash f : T\,B\)}
+    \BinaryInfC{\(\Gamma \vdash \texttt{let}\; x \Leftarrow e \;\texttt{in}\; f : T\,B\)}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}[b]{0.35\linewidth}
+\begin{prooftree}
+    \AxiomC{\(\Gamma \vdash e : A\)}
+    \UnaryInfC{\(\Gamma \vdash \texttt{val}(e) : T\,A\)}
+\end{prooftree}
+\end{minipage}
+\end{minipage}
+\end{figure}
+
+The typing derivations of this logic produce a logic the authors call CL-logic by erasing the terms. An explicit correspondence is given between the type constructors and logical connectives.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l c c c c c}
+\textit{Constructor} & \(1\) & \(\times\) & \(\rightarrow\) & + & \(T\) \\
+\textit{Connective} & \(\top\) & \(\wedge\) & \(\supset\) & \(\vee\) & \(\diamond\)
+\end{tabular}
+\end{table}
+
+Hence \(T\) corresponds to the connective from modal logic \(\diamond\) usually referred to as \enquote{eventually}. The inference rules of CL-logic are given explicitly. The rules dealing with \(\diamond\) are:
+
+\begin{figure}[h]
+\begin{minipage}[b]{1\linewidth}
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+\begin{prooftree}
+    \AxiomC{\(\Gamma \vdash \diamond A\)}
+    \AxiomC{\(\Gamma,A \vdash \diamond B\)}
+    \LeftLabel{(\(\diamond\)E)}
+    \BinaryInfC{\(\Gamma \vdash \diamond B\)}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}[b]{0.35\linewidth}
+\begin{prooftree}
+    \AxiomC{\(\Gamma \vdash A\)}
+    \LeftLabel{(\(\diamond\)I)}
+    \UnaryInfC{\(\Gamma \vdash \diamond A\)}
+\end{prooftree}
+\end{minipage}
+\end{minipage}
+\end{figure}
+
+One theorem that can be proved in this logic (the authors call it \enquote{undesirable}) is \[\diamond A \wedge \diamond \neg A \vdash \diamond (A \wedge \neg A)\] Here the left-hand side of \(\vdash\) might be true while the right-hand side \enquote{appears to always be false}. This is not an ideal situation, but consistency is preserved.
+
+The paper then proves some important properties of the calculus, discusses cut elimination and finally gives a categorical model for the computational \(\lambda\)-calculus inspired by Moggi's original representation of \(\diamond\) as a monad.
+
 \section{Conclusions}
 lala
 
