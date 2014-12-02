@@ -649,9 +649,97 @@ The sorts of this pure type system are \(*^s\) for sets, \(*^p\) for proposition
             \UnaryInfC{\(\Gamma \vdash \phi\)}
         \end{prooftree}
     \end{minipage}
-    \caption{Classical propositional logic. Taken from \textcite[129]{sorensen_lectures_2006}.}
+    \caption{Classical propositional logic, taken from \textcite[129]{sorensen_lectures_2006}. Note that we identify \(\phi \rightarrow \bot\) and \(\neg \phi\), so the premiss for the \(\neg\)E rule could equivalently be written \(\Gamma, \neg \phi \vdash \bot\).}
     \label{fig:classical-prop}
 \end{figure}
+
+Until Timothy Griffin discovered that the principle of double negation elimination corresponds to the typing of a control operator, it was commonly believed that the Curry-Howard correspondence was restricted to intuitionistic logic \autocite{griffin_formulae-as-type_1990}. This idea was further developed into the \(\lambda\mu\)-calculus by Parigot \autocite{parigot_-calculus:_1992}. Chapter 6 of \textcite{sorensen_lectures_2006} provides a clear and thorough treatment of the \(\lambda\mu\)-calculus and its correspondence to classical propositional logic, which I will follow in this section.
+
+Firstly, what makes classical propositional logic different from intuitionistic propositional logic? It adds the following principles:
+
+\begin{description}
+\item[Law of the excluded middle] \(\phi \vee \neg \phi\). Either \(\phi\) holds, or \(\neg \phi\) holds.
+\item[Double negation elimination] \(\neg \neg \phi \rightarrow \phi\). If it is not the case that \(\phi\) does not hold, then \(\phi\) holds.
+\item[Peirce's law] \(((\phi \rightarrow \psi) \rightarrow \phi) \rightarrow \phi\).
+\item[Reductio ad absurdum] \((\neg \phi \rightarrow \phi) \rightarrow \phi)\). If the assumption that \(\phi\) does not hold implies \(\phi\), then \(\phi\) must hold.
+\end{description}
+
+These principles can be derived from the rules given in \cref{fig:classical-prop}. As an example, double negation elimination can be shown as follows:
+
+\begin{prooftree}
+    \AxiomC{}
+    \UnaryInfC{\(\Gamma, \neg\neg\phi, \neg\phi \vdash \neg\neg\phi\)}
+    \AxiomC{}
+    \UnaryInfC{\(\Gamma, \neg\neg\phi, \neg\phi \vdash \neg\phi\)}
+    \RightLabel{(\(\rightarrow\)E)}
+    \BinaryInfC{\(\Gamma, \neg\neg\phi, \neg\phi \vdash \bot\)}
+    \RightLabel{(\(\neg\)E)}
+    \UnaryInfC{\(\Gamma, \neg\neg\phi \vdash \phi\)}
+    \RightLabel{(\(\rightarrow\)I)}
+    \UnaryInfC{\(\Gamma \vdash \neg\neg\phi \rightarrow \phi\)}
+\end{prooftree}
+
+The \(\lambda\mu\)-calculus corresponds to classical propositional logic in the same way that \(\lambda\)-calculus does to intuitionistic propositional logic.
+
+\begin{enumerate}
+\item \(A\) is the set of \emph{addresses} ranged over by \(a\), and \(V\) the set of variables ranged over by \(x\). Then the set of \(\lambda\mu\)-terms is defined as \[M \Coloneqq x \;|\; M M \;|\; \lambda x\!:\!\sigma.M \;|\; [a] M \;|\; \mu a\!:\!\neg \sigma.M\]
+\item An environment \(\Gamma\) is a set of pairs of form \(x:\tau\) \emph{and} \(a:\neg\sigma\).
+\item The typing rules are given in \cref{fig:lambda-mu-typing}.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \begin{minipage}[b]{.3\linewidth}
+        \begin{prooftree}
+            \AxiomC{}
+            \LeftLabel{(axiom)}
+            \UnaryInfC{\(\Gamma, x:\tau \vdash x:\tau\)}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.4\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(\Gamma, x:\sigma \vdash M:\tau\)}
+            \LeftLabel{(abstraction)}
+            \UnaryInfC{\(\Gamma \vdash (\lambda x:\sigma.M) : \sigma \rightarrow \tau\)}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.4\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(\Gamma \vdash M : \sigma \rightarrow \tau\)}
+            \AxiomC{\(\Gamma \vdash N : \sigma\)}
+            \LeftLabel{(application)}
+            \BinaryInfC{\(\Gamma \vdash (M N) : \tau\)}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.5\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(\Gamma, a:\neg\sigma \vdash M : \bot\)}
+            \LeftLabel{(activate)}
+            \UnaryInfC{\(\Gamma \vdash (\mu a:\neg\sigma.M) : \sigma\)}
+        \end{prooftree}
+    \end{minipage}
+    \\
+    \vspace{10pt}
+    \begin{minipage}[b]{.5\linewidth}
+        \begin{prooftree}
+            \AxiomC{\(\Gamma, a:\neg\sigma \vdash M : \sigma\)}
+            \LeftLabel{(passivate)}
+            \UnaryInfC{\(\Gamma, a:\neg\sigma \vdash ([a]M) : \bot\)}
+        \end{prooftree}
+    \end{minipage}
+    \caption{Typing rules of the \(\lambda\mu\), taken from \textcite[133]{sorensen_lectures_2006}. Note that the passivate rule does not have an equivalent in classical propositional logic (\cref{fig:classical-prop}), since the latter does not distinguish between variables and addresses.}
+    \label{fig:lambda-mu-typing}
+\end{figure}
+
+As an example, Peirce's law \(((p \rightarrow q) \rightarrow p) \rightarrow p\) is inhabited by the \(\lambda\mu\)-term \[\lambda x:(p \rightarrow q) \rightarrow p.\mu a:\neg p.[a](x(\lambda z:p.\mu b:\neg q.[a]z))\]
+
+Proofs of subject reduction, confluence and strong normalisation follow. The chapter concludes by describing an embedding of classical propositional logic in intuitionistic propositional logic (Kolmogorov double negation translation), continuation passing style (CPS) translation and extensions of the logic with more introduction and elimination rules.
 
 
 \section{Conclusions}
