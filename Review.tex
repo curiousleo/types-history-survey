@@ -152,11 +152,11 @@ Premiss, conclusion and axiom have the same meaning as in logic. Typing derivati
 
 \section{Early work on types and the Curry-Howard correspondence}
 
-XXX Blurb on Schönfinkel and Church in the 20s and 30s?
+According to Thierry Coquand's article on type theory in the Stanford Encyclopedia of Philosophy, \enquote{[the] theory of types was introduced by Russell in order to cope with some contradictions he found in his account of set theory} in 1903 \autocite{coquand_type_2014}. Type theory was initially a tool used by logicians interested in the foundations of mathematics. As type systems grew more expressive, they were used to reason about an increasing number of domains.
 
 \subsection{Howard on the Curry-Howard correspondence}
 
-William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{XXX explain why it's not an isomorphism}).
+William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{The term \emph{isomorphism} can be misleading: corresponding logics and typed \(\lambda\)-calculi are not always isomorphic. For example, the logic PRED\(\omega\) and the typed lambda calculus \(\lambda\)C correspond in Barendregt's \(\lambda\)-cube / logic cube model (see \cref{ssc:cubes}). But \textcite{barendregt_lambda_1992} cites Geuvers, Berardi and Swaen to have shown that completeness of PRED\(\omega\) with respect to \(\lambda\)C fails, so there are inhabited types in \(\lambda\)C corresponding to unprovable propositions in PRED\(\omega\)---no full isomorphism exists.}).
 
 Howard starts by noting that the rule which introduces an implication on the right-hand side in the sequent calculus is similar to \(\lambda\)-abstraction, and \emph{modus ponens} (the elimination rule for implication on the right-hand side) resembles application in the \(\lambda\)-calculus. Rewritten in a notation consistent with the rest of this survey, Howard's modus ponens and application rule look like this:
 
@@ -386,7 +386,7 @@ f A (\texttt{cons}\;A\;x\;l) &= h'_2\;A\;x\;(\texttt{pair}\;l\;(f\;A\;l))
 
 \section{Uniform formalisations of the Curry-Howard correspondence}
 
-\subsection{Barendregt's \(\lambda\)-cube and the logic cube}
+\subsection{\label{ssc:cubes}Barendregt's \(\lambda\)-cube and the logic cube}
 
 In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Henk Barendregt sets out to uniformly describe eight type systems, with the calculus of constructions the most powerful of all \autocite{barendregt_lambda_1992}. The result is the \(\lambda\)-cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the \(\lambda\)-cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
 
