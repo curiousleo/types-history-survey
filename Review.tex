@@ -22,7 +22,7 @@
 \usepackage{paralist}
 \usepackage{amssymb}
 \usepackage[autocite=footnote,citestyle=authoryear-comp,bibstyle=authoryear,
-            dashed=false,isbn=false,doi=false,backend=biber]{biblatex}
+            dashed=false,isbn=false,doi=false,url=false,backend=biber]{biblatex}
 \usepackage[bookmarks,hidelinks]{hyperref}
 \usepackage[noabbrev,capitalise]{cleveref}
 
@@ -52,6 +52,7 @@
 %%% Body
 \begin{document}
 
+\thispagestyle{empty}
 \maketitle
 
 \abstract{%
@@ -61,6 +62,7 @@ In this survey, I review a selection of influential publications on the correspo
 }
 
 %\tableofcontents
+\vspace{10pt}
 \makeatletter
 \@starttoc{toc}
 \makeatother
