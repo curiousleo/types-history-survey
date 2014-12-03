@@ -40,8 +40,9 @@
   pdftitle={The Curry-Howard correspondence},
   pdfauthor={Leonhard Markert (lm510), Emmanuel College}
 }
-\title{The Brouwer-Heyting-Kolmogorov-Curry-Howard-Tait-Fey correspondence,\\\emph{or}: the formulae-as-types, propositions-as-sets interpretation}
+\title{The Curry-Howard correspondence}
 \author{Leonhard Markert}
+\date{}
 
 \addbibresource{Bibliography.bib}
 % \pagestyle{headings}
@@ -59,8 +60,10 @@ In order to make automated reasoning possible, we need to represent our proposit
 In this survey, I review a selection of influential publications on the correspondence between various flavours of the lambda calculus and the propositions and proofs they allow us to represent.%
 }
 
-\newpage
-\tableofcontents
+%\tableofcontents
+\makeatletter
+\@starttoc{toc}
+\makeatother
 \newpage
 
 \section{Introduction}
@@ -147,8 +150,6 @@ Typing judgements are the counterpart to inference rules in logic. The rule for 
 
 Premiss, conclusion and axiom have the same meaning as in logic. Typing derivations are built up from typing rules and axioms in the same way that proofs are built from the rules and axioms of logic.
 
-%XXX Need to introduce notation here: what is a type, a sort, a type judgement, a context? Also natural deduction primer: entailment, tree structure, axioms and rules.
-
 \section{Early work on types and the Curry-Howard correspondence}
 
 XXX Blurb on Schönfinkel and Church in the 20s and 30s?
@@ -157,7 +158,30 @@ XXX Blurb on Schönfinkel and Church in the 20s and 30s?
 
 William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{XXX explain why it's not an isomorphism}).
 
-Howard starts by noting that the rule which introduces an implication on the right-hand side in the sequent calculus is similar to \(\lambda\)-abstraction, and \emph{modus ponens} (the elimination rule for implication on the right-hand side) resembles application in the \(\lambda\)-calculus.
+Howard starts by noting that the rule which introduces an implication on the right-hand side in the sequent calculus is similar to \(\lambda\)-abstraction, and \emph{modus ponens} (the elimination rule for implication on the right-hand side) resembles application in the \(\lambda\)-calculus. Rewritten in a notation consistent with the rest of this survey, Howard's modus ponens and application rule look like this:
+
+\begin{figure}[h]
+\begin{minipage}[b]{1\linewidth}
+\centering
+\begin{minipage}[b]{0.4\linewidth}
+\begin{prooftree}
+    \AxiomC{\(\Delta \vdash A \rightarrow B\)}
+    \AxiomC{\(\Gamma \vdash A\)}
+    \LeftLabel{(mod.\ pon.)}
+    \BinaryInfC{\(\Gamma,\Delta \vdash B\)}
+\end{prooftree}
+\end{minipage}
+\begin{minipage}[b]{0.4\linewidth}
+\begin{prooftree}
+    \AxiomC{\(\vdash f : A \rightarrow B\)}
+    \AxiomC{\(\vdash t : A\)}
+    \LeftLabel{(app.)}
+    \BinaryInfC{\(\vdash f t : B\)}
+\end{prooftree}
+\end{minipage}
+\end{minipage}
+\end{figure}
+
 
 This simple
 % (positive implicational propositional)
@@ -168,7 +192,7 @@ logic is then extended to include negation as functions with the empty type as t
 In the same book that Howard published his notes in, Nicolaas de Bruijn describes his project \enquote{to develop a system of writing entire mathematical theories in such a precise fashion that verification of the correctness can be carried out by formal operations on the text}, with the express intention to have computers verify proofs \autocite{de_bruijn_survey_1980}. The implementation of his Automath system is first motivated by describing how automated proof checking would benefit working mathematicians.
 % it would increase confidence in the results; it would help in understanding proofs by requiring explicit assumptions; and it would allow for proofs to be processed like any other object in computer memory---one could, for example, find out whether a certain axiom or rule was used in a proof.
 
-Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some intuition for what he calls the \enquote{idea of \emph{propositions as types}} as applied to implication: given propositions \(p\) and \(q\), a proof of the implication \(p \rightarrow q\) can be interpreted as a procedure by which a proof of \(q\) is generated for any \(p\) passed to it. Later sections of the report discuss the potential benefits of introducing a proposition sort (\enquote{expression of degree 1}), and the beginnings of what would nowadays be called tactics. Both ideas have been realised in Coq, for example.\footnote{\url{http://coq.inria.fr}}
+Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some intuition for what he calls the \enquote{idea of \emph{propositions as types}} as applied to implication: given propositions \(p\) and \(q\), a proof of the implication \(p \rightarrow q\) can be interpreted as a procedure by which a proof of \(q\) is generated for any \(p\) passed to it. Later sections of the report discuss the potential benefits of introducing a proposition sort (\enquote{expression of degree 1}), and the beginnings of what would nowadays be called tactics. Both ideas have been realised in the proof assistant Coq, for example.\footnote{\url{http://coq.inria.fr}}
 
 \begin{table}[h]
     \centering
@@ -201,7 +225,7 @@ In this survey, I usually cite and describe the latest of such a series of publi
 %
 for \emph{intuitionistic type theory} (often referred to as \enquote{Martin-Löf type theory}), on which most of the following work discussed in this survey is based \autocite{sambin_intuitionistic_1984}.
 
-Before going into type theory proper, Martin-Löf carefully distinguishes \emph{propositions} from \emph{judgements}: propositions are generated from logical operations and held to be true; holding a proposition to be true is to make a judgement. So when \(A\) is a proposition, then \enquote{\(A\) is true} is a judgement. The premisses and conclusion of a logical inference are judgements. As an example, the rule
+Before going into type theory proper, Martin-Löf carefully distinguishes \emph{propositions} from \emph{judgements}: propositions are generated from logical operations; holding a proposition to be true is to make a judgement. So when \(A\) is a proposition, then \enquote{\(A\) is true} is a judgement. The premisses and conclusion of a logical inference are judgements. As an example, the rule
 
 \begin{prooftree}
 \AxiomC{\(A\)}
@@ -223,10 +247,10 @@ implicitly assumes that \(A\) and \(B\) are propositions, and states that we can
 \item \(A\) is a set/type (in the notes this is written as \(A\) set). Sets/types are defined by describing how their canonical elements (\emph{values} in modern \(\lambda\)-calculus terminology) are formed and what equality of elements means in this set/type.
 \item \(A\) and \(B\) are equal sets/types (\(A = B\)). \(A\) and \(B\) are equal if \(a : A\) entails \(a : B\) and \(a = b : A\) entails \(a = b : B\) and vice versa.
 \item \(a\) is an element of the set/type \(A\) (written \(a \in A\) in the notes; we also use \(a : A\) here). This means that \(a\) is a \enquote{method (or program), which, when executed, yields a canonical element of \(A\) as a result.}
-\item \(a\) and \(b\) are equal elements of the set/type \(A\) (written \(a = b \in A\) or \(a = b : A\)). For this to hold, \(a\) and \(b\) must yield equal canonical elements of \(A\) when executed.
+\item \(a\) and \(b\) are equal elements of the set/type \(A\) (written \(a = b \in A\) or \(a = b : A\)). For this to hold, \(a\) and \(b\) must yield equal canonical elements of \(A\) when executed (that is, they must reduce to the same value).
 \end{enumerate}
 
-A discussion of \emph{equality} in the context of type theory is included. It differentiates between definitional (intensional) equality and propositional (extensional) equality. \emph{Definitional equality} (written \(a \equiv b\)) is the \enquote{equivalence relation generated by abbreviatory definitions, changes of bound variables and the principle of substituting equals for equals.} It is decidable on a meta-level, but \(a \equiv b\) is \emph{not} a proposition within the theory.
+A discussion of \emph{equality} in the context of type theory follows, differentiating between definitional (intensional) equality and propositional (extensional) equality. \emph{Definitional equality} (written \(a \equiv b\)) is the \enquote{equivalence relation generated by abbreviatory definitions, changes of bound variables and the principle of substituting equals for equals.} It is decidable on a meta-level, but \(a \equiv b\) is \emph{not} a proposition within the theory.
 
 \emph{Propositional equality}, on the other hand, resides \emph{within} the theory. \(I(A, a, b)\) is a proposition asserting that \(a\) and \(b\) are equal elements of \(A\).
 
@@ -276,29 +300,47 @@ In the calculus of constructions, \(*\) represents the universe of all types, th
 
 The core calculus, which resembles Martin-Löf's and also draws inspiration from Girard, is then extended by conversion rules of the form \(\Gamma \vdash M \cong N\) meaning that the terms \(M\) and \(N\) denote the same object (where \(\Gamma\) is a context). It formalises \(\beta\)-conversion at the type level.
 
-An interpretation (or semantics) of terms is given: contexts map to products, for example, and variables to projections picking out the appropriate type from the context. It is then shown that the calculus of constructions is \emph{consistent} in the sense that \enquote{there exists a proposition which is not inhabited.} This non-inhabited proposition or empty type is usually referred to as \(\bot\) (\enquote{bottom}). What this theorem means is that there is no term in the calculus of constructions of type \(\bot\), or alternatively, \emph{false} cannot be derived.
+An interpretation (or semantics) of terms is given: contexts map to products, for example, and variables to projections picking out the appropriate type from the context. It is then shown that the calculus of constructions is \emph{consistent} in the sense that \enquote{there exists a proposition which is not inhabited.} This non-inhabited proposition or empty type is usually referred to as \(\bot\) (\enquote{bottom}). What this theorem means is that there is no term in the calculus of constructions of type \(\bot\), or equivalently, \emph{false} cannot be derived.
 
-The section concerned with making the calculus of constructions user-friendly makes three concrete proposals: allowing the local definitions (constants) via a \texttt{let} construct; making type arguments which can be inferred from other arguments implicit; and providing a way to extend the syntax of the language. As an example for the last suggestion, a composition operator is introduced as a syntax extension.
+The section concerned with making the calculus of constructions user-friendly makes three concrete proposals: allowing local definitions (constants) via a \texttt{let} construct; making type arguments which can be inferred from other arguments implicit; and providing a way to extend the syntax of the language. As an example for the last suggestion, a composition operator is introduced as a syntax extension.
 
 
 \subsection{Luo's extended calculus of constructions}
 
-The \emph{extended calculus of constructions} (ECC), first presented by Zhaohui Luo in 1989\autocite{luo_ecc_1989}, expanded upon in his PhD thesis\autocite{luo_extended_1990} and used as the basis for his unified type theory in \citetitle{luo_computation_1994}\autocite{luo_computation_1994}, adds \(\Sigma\)-types to the calculus of constructions to provide an abstraction mechanism.
+The \emph{extended calculus of constructions} (ECC), first presented by Zhaohui Luo in 1989\autocite{luo_ecc_1989}, expanded upon in his PhD thesis\autocite{luo_extended_1990} and used as the basis for his unified type theory in \citetitle{luo_computation_1994}\autocite{luo_computation_1994}, adds \(\Sigma\)-types (also called \emph{dependent pairs}) to the calculus of constructions to provide an abstraction mechanism.
 
-After listing the inference rules of ECC, demonstrating its proof-theoretic properties and giving an intuitionistic set-theoretic semantics, Luo discusses the pragmatics of ECC: expressing and structuring mathematical theories. The example given in \textcite{luo_ecc_1989} is a theory of rings. A simpler example, which we will use here, is given in \textcite{luo_extended_1990}: semigroups (defined as a carrier set closed under an associative binary operation \(\_\cdot\_\)).
+Dependent pairs are eliminated in the same way as non-dependent pairs, but the introduction rule is more complicated:
 
-A straightforward way of formalising semigroups would be to define a context \(\Gamma_{sg} \triangleq X : \textrm{Type}_0, \_\cdot\_ : X \rightarrow X \rightarrow X, p : P_\textrm{assoc}\), where \(P_\textrm{assoc} \triangleq \Pi x,y,z:X.(x \cdot (y \cdot z) = (x \cdot y) \cdot z)\) represents associativity of the binary operation. Luo observes that expressing theories in this way quickly becomes unwieldy.
+\begin{prooftree}
+    \AxiomC{\(\Gamma \vdash M:A\)}
+    \AxiomC{\(\Gamma \vdash N:[M/x]B\)}
+    \AxiomC{\(\Gamma,x:A \vdash B:\textit{Type}_i\)}
+    \LeftLabel{(pair)}
+    \TrinaryInfC{\(\Gamma \vdash \texttt{pair}_{\Sigma x:A.B} (M,N) : (\Sigma x:A.B)\)}
+\end{prooftree}
+
+In words, a dependent pair is formed from terms \(M\) and \(N\) if
+
+\begin{itemize}
+\item \(M\) has type \(A\);
+\item \(N\) has type \([M/x] B\), that is, \(\Gamma \vdash N:B'\) where \(B'\) is obtained by substituting \(M\) for all occurrences of \(x\); and
+\item the result of this substitution is itself a well-formed type.
+\end{itemize}
+
+This introduction rule for dependent pairs is more general than that for non-dependent pairs. It collapses to the latter when \(x\) does not occur in \(B\).
+
+After listing the inference rules of ECC, demonstrating its proof-theoretic properties and giving an intuitionistic set-theoretic semantics, Luo discusses the pragmatics of ECC: expressing and structuring mathematical theories. The example given in \textcite{luo_ecc_1989} is a theory of rings. A simpler example, which we will use here, is given in \textcite{luo_extended_1990}: \emph{semigroups} (defined as a carrier set closed under an associative binary operation \(\_\cdot\_\)).
+
+A straightforward way of formalising semigroups would be to define a context \(\Gamma_{sg} \triangleq X : \textit{Type}_0, \_\cdot\_ : X \rightarrow X \rightarrow X, p : P_\textrm{assoc}\), where \[P_\textrm{assoc} \triangleq \Pi x,y,z:X.(x \cdot (y \cdot z) = (x \cdot y) \cdot z)\] represents associativity of the binary operation. Luo observes that expressing theories in this way quickly becomes unwieldy.
 
 Instead, he proposes to use \(\Sigma\)-types to represent theories in an abstract manner. An \emph{abstract} theory of semigroups would consists of two parts:\footnote{This presentation of semigroup theory is taken directly from \textcite[100]{luo_extended_1990}.}
 
 \begin{itemize}
-\item an (abstract) \emph{signature presentation} \[\textrm{Sig}_{sg} \triangleq \Sigma X : \textrm{Type}_0. X \rightarrow X \rightarrow X\]
-\item an (abstract) \emph{axiom} \(\textrm{Ax}_{sg}\) being a predicate over \(\textrm{Sig}_{sg}\) which, when given any structure \(s\) of type \(\textrm{Sig}_{sg}\), returns its associativity axiom.
+\item an (abstract) \emph{signature presentation} \[\textit{Sig}_{sg} \triangleq \Sigma X : \textit{Type}_0. X \rightarrow X \rightarrow X\]
+\item an (abstract) \emph{axiom} \(\textit{Ax}_{sg}\) being a predicate over \(\textit{Sig}_{sg}\) which, when given any structure \(s\) of type \(\textit{Sig}_{sg}\), returns its associativity axiom.
 \end{itemize}
 
-The signature presentation and the axiom can be packaged together as \[\textrm{Mod}_{sg} \triangleq \Sigma s : \textrm{Sig}_{sg}. \textrm{Ax}_{sg}(s)\] which then represents a complete abstract theory of semigroups. In order to postulate an arbitrary semigroup, one just assumes a context \(\Gamma'_{sg} \triangleq sg : \textrm{Mod}_{sg}\).
-
-Theorems over any semigroup (abstract theorems) then constitute a predicate \(\textrm{Thm}_{sg}\) over \(\textrm{Sig}_{sg}\) with the general form \[\textrm{Thm}_{sg} \triangleq \lambda s : \textrm{Sig}_{sg}. P_1 \wedge P_2 \wedge \dots \wedge P_n\] where \(P_1\) to \(P_n\) are the types corresponding to the theorems that have been proved. Given any concrete semigroup structure, \(\textrm{Prf}_{sg}\), a term of type \(\Pi sg : \textrm{Mod}_{sg}. \textrm{Thm}_{sg}(\pi_1(sg))\), results in the proofs specialised to that particular semigroup structure.
+The signature presentation and the axiom can be packaged together as \[\textit{Mod}_{sg} \triangleq \Sigma s : \textit{Sig}_{sg}. \textit{Ax}_{sg}(s)\] which then represents a complete abstract theory of semigroups. In order to postulate an arbitrary semigroup, one just assumes a context \(\Gamma'_{sg} \triangleq sg : \textit{Mod}_{sg}\). Theorems over any semigroup (abstract theorems) then constitute a predicate \(\textit{Thm}_{sg}\) over \(\textit{Sig}_{sg}\) with the general form \[\textit{Thm}_{sg} \triangleq \lambda s : \textit{Sig}_{sg}. P_1 \wedge P_2 \wedge \dots \wedge P_n\] where \(P_1\) to \(P_n\) are the types corresponding to the theorems that have been proved. Given any concrete semigroup structure, \(\textit{Prf}_{sg}\), a term of type \(\Pi sg : \textit{Mod}_{sg}. \textit{Thm}_{sg}(\pi_1(sg))\), results in the proofs specialised to that particular semigroup structure.
 
 \subsection{Pfenning and Paulin-Mohring's calculus of inductive constructions}
 
@@ -346,7 +388,7 @@ f A (\texttt{cons}\;A\;x\;l) &= h'_2\;A\;x\;(\texttt{pair}\;l\;(f\;A\;l))
 
 \subsection{Barendregt's \(\lambda\)-cube and the logic cube}
 
-In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Henk Barendregt sets out to uniformly describe eight type systems, with the calculus of constructions the most powerful of all. The result is the \(\lambda\)-cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the \(\lambda\)-cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
+In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Henk Barendregt sets out to uniformly describe eight type systems, with the calculus of constructions the most powerful of all \autocite{barendregt_lambda_1992}. The result is the \(\lambda\)-cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the \(\lambda\)-cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
 
 \begin{figure}
 \begin{equation*}
@@ -390,13 +432,13 @@ A key insight in this uniform description of type systems is the mutual dependen
 \item types depending on terms (dependent types).
 \end{itemize}
 
-Barendregt starts by defining the systems \(\lambda^{\rightarrow}\), \(\lambda\textrm{2}\), \(\lambda\underline{\omega}\) and \(\lambda\textrm{P}\) in the usual way. Then a general treatment of all systems in the \(\lambda\)-cube is presented. We summarise it here:
+Barendregt starts by defining the systems \(\lambda^{\rightarrow}\), \(\lambda\textrm{2}\), \(\lambda\underline{\omega}\) and \(\lambda\textrm{P}\) in the usual way. Then a general treatment of all systems in the \(\lambda\)-cube is presented.
 
 \begin{enumerate}
 \item The systems of the \(\lambda\)-cube have the following abstract syntax: \[\mathcal{T} = V \;|\; C \;|\; \mathcal{T}\mathcal{T} \;|\; \lambda V\!\!:\!\mathcal{T}\!.\mathcal{T} \;|\; \Pi V\!\!:\!\mathcal{T}\!.\mathcal{T}\] where \(V\) and \(C\) stand for variables and constants, respectively. Note that no distinction between type- and term-variables is made.
-\item \(\beta\)-reduction is defined by the contraction rule \[(\lambda x:A.B)C \rightarrow B[x \coloneqq C]\]
+\item \(\beta\)-reduction is defined using substitution \[(\lambda x:A.B)C \rightarrow_\beta B[x \coloneqq C]\]
 \item Contexts are finite ordered sequences of declarations \(x:A\), where \(A \in \mathcal{T}\) and \(x\) a variable. The empty context is written \(<>\).
-\item The typing judgements (see \cref{fig:lambda-cube-typing}) axiomatise the notion \[\Gamma \vdash A:B\] stating that \(A:B\) can be derived from context \(\Gamma\). Note that \(A \rightarrow B \equiv \Pi x:A.B\) if \(x\) does not appear free in either \(A\) or \(B\).
+\item The typing judgements (see \cref{fig:lambda-cube-typing}) define the notion \[\Gamma \vdash A:B\] stating that \(A:B\) can be derived from context \(\Gamma\). Note that \(A \rightarrow B \equiv \Pi x:A.B\) if \(x\) does not appear free in either \(A\) or \(B\) (\(\Pi\)-types are also called \emph{dependent function types}).
 
 There are general rules which apply to all systems and the specific rules called \((s_1, s_2)\) rules. In the following, \(s\), \(s_1\) and \(s_2\) range over the set of \emph{sorts}, \(\mathcal{S} \triangleq \{*, \square\}\).
 \item The systems of the \(\lambda\)-cube are then defined by instantiating the \((s_1, s_2)\) rules with a subset of \(\{(*,*), (\square, *), (*,\square), (\square, \square)\}\) as in \cref{tab:lambda-cube-s-rules}.
@@ -545,16 +587,16 @@ The correspondence between the two cubes is a generalised version of the Curry-H
 
 \subsection{Pure type systems}
 
-Berardi and Terlouw independently generalised the framework of the \(\lambda\)-cube to what \textcite{barendregt_lambda_1992} calls \emph{pure type systems}. It accomodates all the systems in the \(\lambda\)-cube and allows subtle differences between many more type systems to be described in a succinct manner. We summarise the definition here, following \textcite[213f.]{barendregt_lambda_1992}:
+Berardi and Terlouw independently generalised the framework of the \(\lambda\)-cube to what \textcite{barendregt_lambda_1992} calls \emph{pure type systems}. It accomodates all the systems in the \(\lambda\)-cube and allows subtle differences between many more type systems to be described in a succinct manner. The definition given here follows \textcite[213f.]{barendregt_lambda_1992}:
 
 \begin{enumerate}
 \item Pure type systems have the same abstract syntax as those in the \(\lambda\)-cube: \[\mathcal{T} = V \;|\; C \;|\; \mathcal{T}\mathcal{T} \;|\; \lambda V\!\!:\!\mathcal{T}\!.\mathcal{T} \;|\; \Pi V\!\!:\!\mathcal{T}\!.\mathcal{T}\]
-\item The \emph{specification} of a pure type system is given by \[S = (\mathcal{S}, \mathcal{A}, \mathcal{R})\] where \(S \subseteq C\) denotes the \emph{sorts}, \(\mathcal{A}\) is a set of \emph{axioms} of the form \(c:s\) with \(c \in \mathcal{C}\) and \(s \in \mathcal{S}\), and \(\mathcal{R}\) is a set of rules of the form \((s_1, s_2, s_3)\) with \(s_1, s_2, s_3 \in \mathcal{S}\).
-\item We divide the set \(V\) of variables into disjoint subsets \(V_s\) for each sort \(s \in \mathcal{S}\) and denote by \(\prescript{s}{}x, \prescript{s}{}y, \prescript{s}{}z, \dots\) the members of \(V_s\).
+\item The \emph{specification} of a pure type system is given by \[S = (\mathcal{S}, \mathcal{A}, \mathcal{R})\] where \(S \subseteq C\) denotes the \emph{sorts}, \(\mathcal{A}\) is a set of \emph{axioms} of the form \(c:s\) with \(c \in \mathcal{C}\) and \(s \in \mathcal{S}\), and \(\mathcal{R}\) is a set of rules of the form \((s_1, s_2, s_3)\) with \(s_1, s_2, s_3 \in \mathcal{S}\). Rules of the form \((s_1, s_2)\) are an abbreviation for \((s_1, s_2, s_2)\).
+\item The set \(V\) of variables is divided into disjoint subsets \(V_s\) for each sort \(s \in \mathcal{S}\) and. \(\prescript{s}{}x, \prescript{s}{}y, \prescript{s}{}z, \dots\) denote members of \(V_s\).
 \item Contexts are defined as for the \(\lambda\)-cube. The axiom and typing judgements are listed in \cref{fig:pts-typing}, where \(x\) ranges over variables and \(s\) ranges of \(\mathcal{S}\), the set of sorts.
 \end{enumerate}
 
-A list of examples of pure type systems follows. Two type systems also present in the \(\lambda\)-cube, \(\lambda^{\rightarrow}\) and \(\lambda\textrm{C}\), are determined by
+Two type systems also present in the \(\lambda\)-cube, \(\lambda^{\rightarrow}\) and \(\lambda\textrm{C}\), are determined as pure type systems by the following specifications:
 
 \begin{align*}
 \lambda^{\rightarrow} &\triangleq
@@ -571,7 +613,7 @@ A list of examples of pure type systems follows. Two type systems also present i
     \end{cases}
 \end{align*}
 
-An example for a system that cannot be represented in the \(\lambda\)-cube is \(\lambda\textrm{U}\), a non-circular system that has been shown to be inconsistent by Girard:
+An example for a system that cannot be represented in the \(\lambda\)-cube is \(\lambda\textrm{U}\), a non-circular system that has been shown to nevertheless be inconsistent by Girard:
 
 \begin{align*}
 \lambda\textrm{U} \triangleq
@@ -584,7 +626,7 @@ An example for a system that cannot be represented in the \(\lambda\)-cube is \(
 
 Many lemmas and proofs follow, leading up the the proof of strong normalisation for all systems in the \(\lambda\)-cube.
 
-Pure type system specification are general enough to also allow for logics in the logic cube to be considered as such. One example is propositional logic (PROP), which corresponds to \(\lambda^{\rightarrow}\) in the \(\lambda\)-cube. The specification looks remarkably similar to that of the type system: the latter can be obtained from the former by removing the superscripts.
+Pure type system specification are general enough to also allow for logics in the logic cube (and not just typed lambda calculi from the \(\lambda\)-cube) to be considered as such. One example is propositional logic (PROP), which corresponds to \(\lambda^{\rightarrow}\) in the \(\lambda\)-cube. The specification looks remarkably similar to that of the type system: the latter can be obtained from the former by removing the superscripts.
 
 \begin{align*}
 \lambda\textrm{PROP} \triangleq
@@ -747,7 +789,7 @@ Firstly, what makes classical propositional logic different from intuitionistic 
 \item[Law of the excluded middle] \(\phi \vee \neg \phi\). Either \(\phi\) holds, or \(\neg \phi\) holds.
 \item[Double negation elimination] \(\neg \neg \phi \rightarrow \phi\). If it is not the case that \(\phi\) does not hold, then \(\phi\) holds.
 \item[Peirce's law] \(((\phi \rightarrow \psi) \rightarrow \phi) \rightarrow \phi\).
-\item[Reductio ad absurdum] \((\neg \phi \rightarrow \phi) \rightarrow \phi)\). If the assumption that \(\phi\) does not hold implies \(\phi\), then \(\phi\) must hold.
+\item[Reductio ad absurdum] \((\neg \phi \rightarrow \phi) \rightarrow \phi\). If the assumption that \(\phi\) does not hold implies \(\phi\), then \(\phi\) must hold.
 \end{description}
 
 These principles can be derived from the rules given in \cref{fig:classical-prop}. As an example, double negation elimination can be shown as follows:
@@ -765,11 +807,11 @@ These principles can be derived from the rules given in \cref{fig:classical-prop
     \UnaryInfC{\(\Gamma \vdash \neg\neg\phi \rightarrow \phi\)}
 \end{prooftree}
 
-The \(\lambda\mu\)-calculus corresponds to classical propositional logic in the same way that \(\lambda\)-calculus does to intuitionistic propositional logic.
+The typing axiom and rules of the \(\lambda\mu\)-calculus correspond to classical propositional logic in the same way that those of the \(\lambda\)-calculus relate to intuitionistic propositional logic.
 
 \begin{enumerate}
-\item \(A\) is the set of \emph{addresses} ranged over by \(a\), and \(V\) the set of variables ranged over by \(x\). Then the set of \(\lambda\mu\)-terms is defined as \[M \Coloneqq x \;|\; M M \;|\; \lambda x\!:\!\sigma.M \;|\; [a] M \;|\; \mu a\!:\!\neg \sigma.M\]
-\item An environment \(\Gamma\) is a set of pairs of form \(x:\tau\) \emph{and} \(a:\neg\sigma\).
+\item \(A\) is the set of \emph{addresses} ranged over by \(a\), and \(V\) the set of variables ranged over by \(x\). Types are ranged over by \(\sigma\) and \(\tau\). The set of \(\lambda\mu\)-terms is defined as \[M \Coloneqq x \;|\; M M \;|\; \lambda x\!:\!\sigma.M \;|\; [a] M \;|\; \mu a\!:\!\neg \sigma.M\]
+\item An environment \(\Gamma\) is a set of pairs of form \(x:\tau\) or \(a:\neg\sigma\).
 \item The typing rules are given in \cref{fig:lambda-mu-typing}.
 \end{enumerate}
 
@@ -819,7 +861,7 @@ The \(\lambda\mu\)-calculus corresponds to classical propositional logic in the 
             \UnaryInfC{\(\Gamma, a:\neg\sigma \vdash ([a]M) : \bot\)}
         \end{prooftree}
     \end{minipage}
-    \caption{Typing rules of the \(\lambda\mu\), taken from \textcite[133]{sorensen_lectures_2006}. Note that the passivate rule does not have an equivalent in classical propositional logic (\cref{fig:classical-prop}), since the latter does not distinguish between variables and addresses.}
+    \caption{Typing rules of the \(\lambda\mu\)-calculus, taken from \textcite[133]{sorensen_lectures_2006}. Note that the passivate rule does not have an equivalent in classical propositional logic (\cref{fig:classical-prop}), since the latter does not distinguish between variables and addresses.}
     \label{fig:lambda-mu-typing}
 \end{figure}
 
@@ -830,17 +872,17 @@ Proofs of subject reduction, confluence and strong normalisation follow. The cha
 
 \subsection{Intuitionistic modal logic}
 
-The correspondence between intuitionistic modal logic and the \(\lambda\)-calculus was already mentioned in \textcite{curry_elimination_1952}. This connection was re-evaluated much later in a number of papers in the late 1990s and early 200s---\textcite{paiva_modalities_2004} provides a good overview with many references. The paper I will concentrate on in this section is \textcite{benton_computational_1995}, which demonstrates the correspondence between the computational \(\lambda\)-calculus \autocite{moggi_notions_1991} and an intuitionistic modal propositional logic.
+The correspondence between intuitionistic \emph{modal} logic and the \(\lambda\)-calculus was already mentioned in \textcite{curry_elimination_1952}. This connection was reconsidered much later in a number of papers in the late 1990s and early 200s---\textcite{paiva_modalities_2004} provides a good overview with many references. The paper I will concentrate on in this section is \textcite{benton_computational_1995}, which demonstrates the correspondence between the computational \(\lambda\)-calculus \autocite{moggi_notions_1991} and an intuitionistic modal propositional logic.
 
-The computational \(\lambda\)-calculus is introduced by giving its additional \(\beta\)-reduction rules:
+The \emph{computational \(\lambda\)-calculus} is introduced by giving its additional \(\beta\)-equivalences:
 
 \begin{align*}
-\texttt{let}\; x \Leftarrow (\texttt{val}(e)) \;\texttt{in}\; f &\rightarrow_\beta f[e/x] \\
-\texttt{let}\; x \Leftarrow e \;\texttt{in}\; (\texttt{val}(x)) &\rightarrow_\beta e \\
-\texttt{let}\; x' \Leftarrow (\texttt{let}\; x \Leftarrow e \;\texttt{in}\; f) \;\texttt{in}\; g &\rightarrow_\beta \;\texttt{let}\; x \Leftarrow e \;\texttt{in}\; (\texttt{let}\; x' \Leftarrow f \;\texttt{in}\; g)
+\textrm{let}\; x \Leftarrow (\textrm{val}(e)) \,\;\textrm{in}\; f \quad &= \quad f[e/x] \\
+\textrm{let}\; x \Leftarrow e \;\textrm{in}\; (\textrm{val}(x)) \quad &= \quad e \\
+\textrm{let}\; x' \Leftarrow (\textrm{let}\; x \Leftarrow e \;\textrm{in}\; f) \;\textrm{in}\; g \quad &= \quad \textrm{let}\; x \Leftarrow e \;\textrm{in}\; (\textrm{let}\; x' \Leftarrow f \;\textrm{in}\; g)
 \end{align*}
 
-Next the typing rules for the calculus are presented. In addition to the standard axiom as well as introduction and elimination rules for functions, pairs and sums, it contains the axiom \(\Gamma \vdash * : 1\) and the following rules for typing monadic computations in the strong monad \(T\):
+Next the typing rules for the calculus are presented. In addition to the standard axiom as well as introduction and elimination rules for functions, pairs and sums, it contains the axiom \(\Gamma \vdash * : 1\) and the following rules for typing computations in the strong monad \(T\):
 
 \begin{figure}[h]
 \begin{minipage}[b]{1\linewidth}
@@ -861,7 +903,7 @@ Next the typing rules for the calculus are presented. In addition to the standar
 \end{minipage}
 \end{figure}
 
-The typing derivations of this logic produce a logic the authors call CL-logic by erasing the terms. An explicit correspondence is given between the type constructors and logical connectives.
+These typing rules produce a logic the authors call CL-logic by erasing the terms. An explicit correspondence is given between the type constructors and logical connectives.
 
 \begin{table}[h]
 \centering
@@ -894,12 +936,13 @@ Hence \(T\) corresponds to the connective from modal logic \(\diamond\) usually 
 \end{minipage}
 \end{figure}
 
-One theorem that can be proved in this logic (the authors call it \enquote{undesirable}) is \[\diamond A \wedge \diamond \neg A \vdash \diamond (A \wedge \neg A)\] Here the left-hand side of \(\vdash\) might be true while the right-hand side \enquote{appears to always be false}. This is not an ideal situation, but consistency is preserved.
+One theorem that can be proved in this logic (the authors call it \enquote{undesirable}) is \[\diamond A \wedge \diamond \neg A \vdash \diamond (A \wedge \neg A)\] Here the left-hand side of \(\vdash\) might be true while the right-hand side \enquote{appears to always be false}. This is not an ideal situation for a logic the tries to \enquote{capture the general notion of possibility}, but consistency is preserved.
 
-The paper then proves some important properties of the calculus, discusses cut elimination and finally gives a categorical model for the computational \(\lambda\)-calculus inspired by Moggi's original representation of \(\diamond\) as a monad.
+The paper then proves some important properties of the calculus, discusses cut elimination and finally gives a categorical model for the computational \(\lambda\)-calculus inspired by Moggi's original representation of \(\diamond\) as a monad \autocite{moggi_notions_1991}.
 
 \section{Conclusions}
-lala
+
+XXX
 
 \printbibliography
 
