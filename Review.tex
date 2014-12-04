@@ -158,7 +158,7 @@ According to Thierry Coquand's article on type theory in the Stanford Encycloped
 
 \subsection{Howard on the Curry-Howard correspondence}
 
-William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{The term \emph{isomorphism} can be misleading: corresponding logics and typed \(\lambda\)-calculi are not always isomorphic. For example, the logic PRED\(\omega\) corresponds to the typed lambda calculus \(\lambda\)C in Barendregt's \(\lambda\)-cube / logic cube model (see \cref{ssc:cubes}). But according to \textcite{barendregt_lambda_1992}, completeness of PRED\(\omega\) with respect to \(\lambda\)C fails, so there are inhabited types in \(\lambda\)C corresponding to unprovable propositions in PRED\(\omega\)---in this instance, no full isomorphism exists.}).
+William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence (or isomorphism\footnote{The term \emph{isomorphism} can be misleading: corresponding logics and typed \(\lambda\)-calculi are not always isomorphic. For example, the logic PRED\(\omega\) corresponds to the typed lambda calculus \(\lambda\)C in Barendregt's Lambda Cube / Logic Cube model (see \cref{ssc:cubes}). But according to \textcite{barendregt_lambda_1992}, completeness of PRED\(\omega\) with respect to \(\lambda\)C fails, so there are inhabited types in \(\lambda\)C corresponding to unprovable propositions in PRED\(\omega\)---in this instance, no full isomorphism exists.}).
 
 Howard starts by noting that the rule which introduces an implication on the right-hand side in the sequent calculus is similar to \(\lambda\)-abstraction, and \emph{modus ponens} (the elimination rule for implication on the right-hand side) resembles application in the \(\lambda\)-calculus. Rewritten in a notation consistent with the rest of this survey, Howard's modus ponens and application rule look like this:
 
@@ -216,16 +216,16 @@ Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some in
 
 \section{More powerful type systems emerge}
 
-\subsection{Martin-Löf's intuitionistic type theory}
+\subsection{Martin-Löf's Intuitionistic Type Theory}
 
 A set of notes from a lecture series given by Per Martin-Löf in 1980 is the canonical reference\footnote{%
 Martin-Löf published several papers on type theory and logic, as did de Bruijn, Coquand, Huet and most other authors whose publications this literature survey discusses. It is clear from the amount of cross-referencing and citing in those papers that the leading researchers at the time were often in close contact, criticising each other's work, finding mistakes or opening up new perspectives---\emph{science} was being done.
 
-This makes untangling the development of the subject \emph{a posteriori} difficult. Martin-Löf developed his type theory over the course of multiple publications spanning decades. \enquote{The} calculus of constructions does not exist; instead, it is a term used by Coquand and Huet to refer to a family of type theories and conceptual programming languages described in at least four papers.
+This makes untangling the development of the subject \emph{a posteriori} difficult. Martin-Löf developed his type theory over the course of multiple publications spanning decades. \enquote{The} Calculus of Constructions does not exist; instead, it is a term used by Coquand and Huet to refer to a family of type theories and conceptual programming languages described in at least four papers.
 
 In this survey, I usually cite and describe the latest of such a series of publications on a particular topic by a particular author or set of authors.}
 %
-for \emph{intuitionistic type theory} (often referred to as \enquote{Martin-Löf type theory}), on which most of the following work discussed in this survey is based \autocite{sambin_intuitionistic_1984}.
+for \emph{Intuitionistic Type Theory} (often referred to as \enquote{Martin-Löf type theory}), on which most of the following work discussed in this survey is based \autocite{sambin_intuitionistic_1984}.
 
 Before going into type theory proper, Martin-Löf carefully distinguishes \emph{propositions} from \emph{judgements}: propositions are generated from logical operations; holding a proposition to be true is to make a judgement. So when \(A\) is a proposition, then \enquote{\(A\) is true} is a judgement. The premisses and conclusion of a logical inference are judgements. As an example, the rule
 
@@ -288,28 +288,28 @@ Considering these from the perspective of logic, formation rules are used to for
 	
         \bottomrule
     \end{tabular}
-    \caption{Symbols defined in Martin-Löf's intuitionistic type theory \parencite{sambin_intuitionistic_1984}.}
+    \caption{Symbols defined in Martin-Löf's Intuitionistic Type Theory \parencite{sambin_intuitionistic_1984}.}
     \label{tab:martin-loef}
 \end{table}
 
-\subsection{Coquand and Huet's calculus of constructions}
+\subsection{Coquand and Huet's Calculus of Constructions}
 
-Coquand and Huet's \emph{calculus of constructions} blends together the theoretical work by Martin-Löf and Girard with the more concrete proposals of de Bruijn \autocite{coquand_calculus_1988}. They first describe the metatheory of the calculus and then provide suggestions concerning how such a calculus could be implemented in a user-friendly way.
+Coquand and Huet's \emph{Calculus of Constructions} blends together the theoretical work by Martin-Löf and Girard with the more concrete proposals of de Bruijn \autocite{coquand_calculus_1988}. They first describe the metatheory of the calculus and then provide suggestions concerning how such a calculus could be implemented in a user-friendly way.
 
-In the calculus of constructions, \(*\) represents the universe of all types, that is, the type of all types \emph{and} the type of all propositions. \(*\) is not of type~\(*\) to avoid Girard's paradox.\footnote{A judgement like \(* : *\) in a type theory makes it possible to prove any proposition, or equivalently, implies that every type (even \(\bot\)) is inhabited. An early version of Martin-Löf's type theory was shown to suffer from this problem, usually referred to as \emph{Girard's paradox}, and the publication that is usually cited in this context is his doctoral thesis, \textcite{girard_interpretation_1972} (written in French). Thierry Coquand wrote a very readable introduction to the issue for the Stanford Encyclopedia of Philosophy, relating it, amongst others, to Russel's paradox \autocite{coquand_type_2014}. Coq and Agda avoid Girard's paradox via an infinite hierarchy of types---an approach that closely resembles Grothendieck's solution to similar issues in set theory by introducing what are now called \emph{Grothendieck universes} \autocite{artin_orie_1972}.} This differs from the Automath languages, where propositions are of type \textit{prop}, types are of type \textit{type} and both \textit{type} and \textit{prop} have type \(\tau\).
+In the Calculus of Constructions, \(*\) represents the universe of all types, that is, the type of all types \emph{and} the type of all propositions. \(*\) is not of type~\(*\) to avoid Girard's paradox.\footnote{A judgement like \(* : *\) in a type theory makes it possible to prove any proposition, or equivalently, implies that every type (even \(\bot\)) is inhabited. An early version of Martin-Löf's type theory was shown to suffer from this problem, usually referred to as \emph{Girard's paradox}, and the publication that is usually cited in this context is his doctoral thesis, \textcite{girard_interpretation_1972} (written in French). Thierry Coquand wrote a very readable introduction to the issue for the Stanford Encyclopedia of Philosophy, relating it, amongst others, to Russel's paradox \autocite{coquand_type_2014}. Coq and Agda avoid Girard's paradox via an infinite hierarchy of types---an approach that closely resembles Grothendieck's solution to similar issues in set theory by introducing what are now called \emph{Grothendieck universes} \autocite{artin_orie_1972}.} This differs from the Automath languages, where propositions are of type \textit{prop}, types are of type \textit{type} and both \textit{type} and \textit{prop} have type \(\tau\).
 
 \emph{Contexts} (Martin-Löf's \enquote{hypothetical judgements}) are defined as \enquote{[t]erms formed solely of products over \(*\) [\dots] They are the types of logical propositions and proposition schemas}. The paper refers to other terms as \emph{objects}.
 
 The core calculus, which resembles Martin-Löf's and also draws inspiration from Girard, is then extended by conversion rules of the form \(\Gamma \vdash M \cong N\) meaning that the terms \(M\) and \(N\) denote the same object (where \(\Gamma\) is a context). It formalises \(\beta\)-conversion at the type level.
 
-An interpretation (or semantics) of terms is given: contexts map to products, for example, and variables to projections picking out the appropriate type from the context. It is then shown that the calculus of constructions is \emph{consistent} in the sense that \enquote{there exists a proposition which is not inhabited.} This non-inhabited proposition or empty type is usually referred to as \(\bot\) (\enquote{bottom}). What this theorem means is that there is no term in the calculus of constructions of type \(\bot\), or equivalently, \emph{false} cannot be derived.
+An interpretation (or semantics) of terms is given: contexts map to products, for example, and variables to projections picking out the appropriate type from the context. It is then shown that the Calculus of Constructions is \emph{consistent} in the sense that \enquote{there exists a proposition which is not inhabited.} This non-inhabited proposition or empty type is usually referred to as \(\bot\) (\enquote{bottom}). What this theorem means is that there is no term in the Calculus of Constructions of type \(\bot\), or equivalently, \emph{false} cannot be derived.
 
-The section concerned with making the calculus of constructions user-friendly makes three concrete proposals: allowing local definitions (constants) via a \textit{let} construct; making type arguments which can be inferred from other arguments implicit; and providing a way to extend the syntax of the language. As an example for the last suggestion, a composition operator is introduced as a syntax extension.
+The section concerned with making the Calculus of Constructions user-friendly makes three concrete proposals: allowing local definitions (constants) via a \textit{let} construct; making type arguments which can be inferred from other arguments implicit; and providing a way to extend the syntax of the language. As an example for the last suggestion, a composition operator is introduced as a syntax extension.
 
 
-\subsection{Luo's extended calculus of constructions}
+\subsection{Luo's Extended Calculus of Constructions}
 
-The \emph{extended calculus of constructions} (ECC), first presented by Zhaohui Luo in 1989\autocite{luo_ecc_1989}, expanded upon in his PhD thesis\autocite{luo_extended_1990} and used as the basis for his unified type theory in \citetitle{luo_computation_1994}\autocite{luo_computation_1994}, adds \(\Sigma\)-types (also called \emph{dependent pairs}) to the calculus of constructions to provide an abstraction mechanism.
+The \emph{Extended Calculus of Constructions} (ECC), first presented by Zhaohui Luo in 1989\autocite{luo_ecc_1989}, expanded upon in his PhD thesis\autocite{luo_extended_1990} and used as the basis for his unified type theory in \citetitle{luo_computation_1994}\autocite{luo_computation_1994}, adds \(\Sigma\)-types (also called \emph{dependent pairs}) to the Calculus of Constructions to provide an abstraction mechanism.
 
 Dependent pairs are eliminated in the same way as non-dependent pairs, but the introduction rule is more complicated:
 
@@ -344,11 +344,11 @@ Instead, he proposes to use \(\Sigma\)-types to represent theories in an abstrac
 
 The signature presentation and the axiom can be packaged together as \[\textit{Mod}_{sg} \triangleq \Sigma s : \textit{Sig}_{sg}. \textit{Ax}_{sg}(s)\] which then represents a complete abstract theory of semigroups. In order to postulate an arbitrary semigroup, one just assumes a context \(\Gamma'_{sg} \triangleq sg : \textit{Mod}_{sg}\). Theorems over any semigroup (abstract theorems) then constitute a predicate \(\textit{Thm}_{sg}\) over \(\textit{Sig}_{sg}\) with the general form \[\textit{Thm}_{sg} \triangleq \lambda s : \textit{Sig}_{sg}. P_1 \wedge P_2 \wedge \dots \wedge P_n\] where \(P_1\) to \(P_n\) are the types corresponding to the theorems that have been proved. Given any concrete semigroup structure, \(\textit{Prf}_{sg}\), a term of type \(\Pi sg : \textit{Mod}_{sg}. \textit{Thm}_{sg}(\pi_1(sg))\), results in the proofs specialised to that particular semigroup structure.
 
-\subsection{Pfenning and Paulin-Mohring's calculus of inductive constructions}
+\subsection{Pfenning and Paulin-Mohring's Calculus of Inductive Constructions}
 
-\textcite{pfenning_inductively_1990} extends the calculus of constructions with inductively defined types---an extension which, interestingly, does not augment its computational capabilities, it only makes the proof language more powerful.
+\textcite{pfenning_inductively_1990} extends the Calculus of Constructions with inductively defined types---an extension which, interestingly, does not augment its computational capabilities, it only makes the proof language more powerful.
 
-A short introduction to the calculus of constructions is given before defining the syntax for inductively defined types. Many examples follow, including a definition of natural numbers (see \cref{fig:nat-inductive-type}) and lists (see \cref{fig:list-inductive-type}).
+A short introduction to the Calculus of Constructions is given before defining the syntax for inductively defined types. Many examples follow, including a definition of natural numbers (see \cref{fig:nat-inductive-type}) and lists (see \cref{fig:list-inductive-type}).
 
 \begin{figure}[h]
 \centering
@@ -360,7 +360,7 @@ A short introduction to the calculus of constructions is given before defining t
 end
 \end{alltt}
 \end{subfigure}
-\caption{Natural numbers in the calculus of inductive constructions.}
+\caption{Natural numbers in the Calculus of Inductive Constructions.}
 \label{fig:nat-inductive-type}
 \end{figure}
 
@@ -374,7 +374,7 @@ end
 end
 \end{alltt}
 \end{subfigure}
-\caption{Lists in the calculus of inductive constructions.}
+\caption{Lists in the Calculus of Inductive Constructions.}
 \label{fig:list-inductive-type}
 \end{figure}
 
@@ -390,9 +390,9 @@ XXX concluding remarks
 
 \section{Uniform formalisations of the Curry-Howard correspondence}
 
-\subsection{\label{ssc:cubes}Barendregt's \(\lambda\)-cube and the logic cube}
+\subsection{\label{ssc:cubes}Barendregt's Lambda Cube and the Logic Cube}
 
-In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Henk Barendregt sets out to uniformly describe eight type systems, with the calculus of constructions the most powerful \autocite{barendregt_lambda_1992}. The result is the \(\lambda\)-cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the \(\lambda\)-cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
+In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Henk Barendregt sets out to uniformly describe eight type systems, with the Calculus of Constructions the most powerful \autocite{barendregt_lambda_1992}. The result is the Lambda Cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the Lambda Cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
 
 \begin{figure}
 \begin{equation*}
@@ -403,7 +403,7 @@ In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} i
 \lambda^{\rightarrow}\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&\lambda\textrm{P}\ar@{->}[uu]\ar@{->}[ur]
 }
 \end{equation*}
-\caption{The \(\lambda\)-cube.}
+\caption{The Lambda Cube.}
 \label{fig:lambda-cube}
 \end{figure}
 
@@ -418,12 +418,12 @@ In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} i
         \(\lambda\omega\) & \emph{Système F\(\omega\)} (Girard) \\
         \(\lambda\textrm{P}\) & \emph{LF} (Harper) and Automath languages (de Bruijn) \\
         \(\lambda\textrm{P2}\) & Studied by Longo and Moggi \\
-        \(\lambda\textrm{C} = \lambda\textrm{P}\omega\) & Calculus of constructions (Coquand and Huet) \\
+        \(\lambda\textrm{C} = \lambda\textrm{P}\omega\) & Calculus of Constructions (Coquand and Huet) \\
         \(\lambda\underline{\omega}\) (\enquote{weak} \(\lambda\omega\)) & Related to a system studied by de Lavalette \\
         \(\lambda\textrm{P}\underline{\omega}\) (\enquote{weak} \(\lambda\textrm{P}\omega\)) & --- \\
         \bottomrule
     \end{tabular}
-    \caption{Other names for the type systems in the \(\lambda\)-cube. Summary based on \textcite[193]{barendregt_lambda_1992}.}
+    \caption{Other names for the type systems in the Lambda Cube. Summary based on \textcite[193]{barendregt_lambda_1992}.}
     \label{tab:lambda-cube-type-systems}
 \end{table}
 
@@ -436,16 +436,16 @@ A key insight in this uniform description of type systems is the mutual dependen
 \item types depending on terms (dependent types).
 \end{itemize}
 
-Barendregt starts by defining the systems \(\lambda^{\rightarrow}\), \(\lambda\textrm{2}\), \(\lambda\underline{\omega}\) and \(\lambda\textrm{P}\) in the usual way. Then a general treatment of all systems in the \(\lambda\)-cube is presented.
+Barendregt starts by defining the systems \(\lambda^{\rightarrow}\), \(\lambda\textrm{2}\), \(\lambda\underline{\omega}\) and \(\lambda\textrm{P}\) in the usual way. Then a general treatment of all systems in the Lambda Cube is presented.
 
 \begin{enumerate}
-\item The systems of the \(\lambda\)-cube have the following abstract syntax: \[\mathcal{T} = V \;|\; C \;|\; \mathcal{T}\mathcal{T} \;|\; \lambda V\!\!:\!\mathcal{T}\!.\mathcal{T} \;|\; \Pi V\!\!:\!\mathcal{T}\!.\mathcal{T}\] where \(V\) and \(C\) stand for variables and constants, respectively. Note that no distinction between type- and term-variables is made.
+\item The systems of the Lambda Cube have the following abstract syntax: \[\mathcal{T} = V \;|\; C \;|\; \mathcal{T}\mathcal{T} \;|\; \lambda V\!\!:\!\mathcal{T}\!.\mathcal{T} \;|\; \Pi V\!\!:\!\mathcal{T}\!.\mathcal{T}\] where \(V\) and \(C\) stand for variables and constants, respectively. Note that no distinction between type- and term-variables is made.
 \item \(\beta\)-reduction is defined using substitution \[(\lambda x:A.B)C \rightarrow_\beta B[x \coloneqq C]\]
 \item Contexts are finite ordered sequences of declarations \(x:A\), where \(A \in \mathcal{T}\) and \(x\) a variable. The empty context is written \(<>\).
 \item The typing judgements (see \cref{fig:lambda-cube-typing}) define the notion \[\Gamma \vdash A:B\] stating that \(A:B\) can be derived from context \(\Gamma\). Note that \(A \rightarrow B \equiv \Pi x:A.B\) if \(x\) does not appear free in either \(A\) or \(B\) (\(\Pi\)-types are also called \emph{dependent function types}).
 
 There are general rules which apply to all systems and the specific rules called \((s_1, s_2)\) rules. In the following, \(s\), \(s_1\) and \(s_2\) range over the set of \emph{sorts}, \(\mathcal{S} \triangleq \{*, \square\}\).
-\item The systems of the \(\lambda\)-cube are then defined by instantiating the \((s_1, s_2)\) rules with a subset of \(\{(*,*), (\square, *), (*,\square), (\square, \square)\}\) as in \cref{tab:lambda-cube-s-rules}.
+\item The systems of the Lambda Cube are then defined by instantiating the \((s_1, s_2)\) rules with a subset of \(\{(*,*), (\square, *), (*,\square), (\square, \square)\}\) as in \cref{tab:lambda-cube-s-rules}.
 
 \begin{table}[h]
     \centering
@@ -469,7 +469,7 @@ There are general rules which apply to all systems and the specific rules called
 
         \bottomrule
     \end{tabular}
-    \caption{Specific rules for the systems of the \(\lambda\)-cube. Table taken from \textcite[205]{barendregt_lambda_1992}.}
+    \caption{Specific rules for the systems of the Lambda Cube. Table taken from \textcite[205]{barendregt_lambda_1992}.}
     \label{tab:lambda-cube-s-rules}
 \end{table}
 \end{enumerate}
@@ -543,17 +543,17 @@ There are general rules which apply to all systems and the specific rules called
             \BinaryInfC{\(\Gamma \vdash (\Pi x:A.B):s_2\)}
         \end{prooftree}
     \end{minipage}
-    \caption{Axiom and typing judgements of the \(\lambda\)-cube.}
+    \caption{Axiom and typing judgements of the Lambda Cube.}
     \label{fig:lambda-cube-typing}
 \end{figure}
 
 % \((\square, *)\) is impredicative
 
-The description of the \(\lambda\)-cube is followed by many examples of what kinds of expressions are admissible in its type systems. Next, the \emph{logic cube} is introduced (\cref{fig:l-cube}): it contains eight systems of intuitionistic logic, each corresponding to the type system at the same corner in the \(\lambda\)-cube. Again, the naming scheme is non-standard so a short description of each logic is provided (\cref{tab:l-cube-names}).
+The description of the Lambda Cube is followed by many examples of what kinds of expressions are admissible in its type systems. Next, the \emph{Logic Cube} is introduced (\cref{fig:l-cube}): it contains eight systems of intuitionistic logic, each corresponding to the type system at the same corner in the Lambda Cube. Again, the naming scheme is non-standard so a short description of each logic is provided (\cref{tab:l-cube-names}).
 
 \enquote{Weakly higher-order logics} have variables for higher-order propositions or predicates but no quantification over them. Again, the edges of the cube represent inclusion.
 
-The correspondence between the two cubes is a generalised version of the Curry-Howard interpretation: each formula \(A\) in logic \(L_i\) on the logic cube can be interpreted as a type \(\llbracket A \rrbracket\) in the corresponding system \(\lambda_i\) on the \(\lambda\)-cube. If \(A\) is provable in \(L_i\) then \(\llbracket A \rrbracket\) is inhabited in \(\lambda_i\) (soundness).\footnote{Barendregt quotes Geuvers' Master thesis from 1988 for this result. Unfortunately I was unable to track it down.} Completeness (inhabitation of \(\llbracket A \rrbracket\) implies \(A\) is provable) holds for propositional logics but not in general for predicate logics. For example, completeness for PRED\(\omega\) (higher-order logic) with respect to \(\lambda\)C (calculus of constructions) fails.
+The correspondence between the two cubes is a generalised version of the Curry-Howard interpretation: each formula \(A\) in logic \(L_i\) on the Logic Cube can be interpreted as a type \(\llbracket A \rrbracket\) in the corresponding system \(\lambda_i\) on the Lambda Cube. If \(A\) is provable in \(L_i\) then \(\llbracket A \rrbracket\) is inhabited in \(\lambda_i\) (soundness).\footnote{Barendregt quotes Geuvers' Master thesis from 1988 for this result. Unfortunately I was unable to track it down.} Completeness (inhabitation of \(\llbracket A \rrbracket\) implies \(A\) is provable) holds for propositional logics but not in general for predicate logics. For example, completeness for PRED\(\omega\) (higher-order logic) with respect to \(\lambda\)C (Calculus of Constructions) fails.
 
 \begin{figure}
 \begin{equation*}
@@ -564,7 +564,7 @@ The correspondence between the two cubes is a generalised version of the Curry-H
 \textrm{PROP}\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&\textrm{PRED}\ar@{->}[uu]\ar@{->}[ur]
 }
 \end{equation*}
-\caption{The logic cube.}
+\caption{The Logic Cube.}
 \label{fig:l-cube}
 \end{figure}
 
@@ -584,23 +584,23 @@ The correspondence between the two cubes is a generalised version of the Curry-H
         PRED\(\omega\) & Higher-order predicate logic \\
         \bottomrule
     \end{tabular}
-    \caption{The logics in the logic cube. Taken from \textcite[248]{barendregt_lambda_1992}.}
+    \caption{The logics in the Logic Cube. Taken from \textcite[248]{barendregt_lambda_1992}.}
     \label{tab:l-cube-names}
 \end{table}
 
 
-\subsection{Pure type systems}
+\subsection{Pure Type Systems}
 
-Berardi and Terlouw independently generalised the framework of the \(\lambda\)-cube to what \textcite{barendregt_lambda_1992} calls \emph{pure type systems}. It accomodates all the systems in the \(\lambda\)-cube and allows subtle differences between many more type systems to be described in a succinct manner. The definition given here follows \textcite[213f.]{barendregt_lambda_1992}:
+Berardi and Terlouw independently generalised the framework of the Lambda Cube to what \textcite{barendregt_lambda_1992} calls \emph{Pure Type Systems}. It accomodates all the systems in the Lambda Cube and allows subtle differences between many more type systems to be described in a succinct manner. The definition given here follows \textcite[213f.]{barendregt_lambda_1992}:
 
 \begin{enumerate}
-\item Pure type systems have the same abstract syntax as those in the \(\lambda\)-cube.
-\item The \emph{specification} of a pure type system is given by \[S = (\mathcal{S}, \mathcal{A}, \mathcal{R})\] where \(\mathcal{S} \subseteq C\) denotes the \emph{sorts}, \(\mathcal{A}\) is a set of \emph{axioms} of the form \(c:s\) with \(c \in \mathcal{C}\) and \(s \in \mathcal{S}\), and \(\mathcal{R}\) is a set of rules of the form \((s_1, s_2, s_3)\) with \(s_1, s_2, s_3 \in \mathcal{S}\). Rules of the form \((s_1, s_2)\) are an abbreviation for \((s_1, s_2, s_2)\).
+\item Pure Type Systems have the same abstract syntax as those in the Lambda Cube.
+\item The \emph{specification} of a Pure Type System is given by \[S = (\mathcal{S}, \mathcal{A}, \mathcal{R})\] where \(\mathcal{S} \subseteq C\) denotes the \emph{sorts}, \(\mathcal{A}\) is a set of \emph{axioms} of the form \(c:s\) with \(c \in \mathcal{C}\) and \(s \in \mathcal{S}\), and \(\mathcal{R}\) is a set of rules of the form \((s_1, s_2, s_3)\) with \(s_1, s_2, s_3 \in \mathcal{S}\). Rules of the form \((s_1, s_2)\) are an abbreviation for \((s_1, s_2, s_2)\).
 \item The set \(V\) of variables is divided into disjoint subsets \(V_s\) for each sort \(s \in \mathcal{S}\) and. \(\prescript{s}{}x, \prescript{s}{}y, \prescript{s}{}z, \dots\) denote members of \(V_s\).
-\item Contexts are defined as for the \(\lambda\)-cube. The axiom and typing judgements are listed in \cref{fig:pts-typing}, where \(x\) ranges over variables and \(s\) ranges over \(\mathcal{S}\), the set of sorts.
+\item Contexts are defined as for the Lambda Cube. The axiom and typing judgements are listed in \cref{fig:pts-typing}, where \(x\) ranges over variables and \(s\) ranges over \(\mathcal{S}\), the set of sorts.
 \end{enumerate}
 
-Two type systems also present in the \(\lambda\)-cube, \(\lambda^{\rightarrow}\) and \(\lambda\textrm{C}\), are determined as pure type systems by the following specifications:
+Two type systems also present in the Lambda Cube, \(\lambda^{\rightarrow}\) and \(\lambda\textrm{C}\), are determined as Pure Type Systems by the following specifications:
 
 \begin{align*}
 \lambda^{\rightarrow} &\triangleq
@@ -617,7 +617,7 @@ Two type systems also present in the \(\lambda\)-cube, \(\lambda^{\rightarrow}\)
     \end{cases}
 \end{align*}
 
-An example for a system that cannot be represented in the \(\lambda\)-cube is \(\lambda\textrm{U}\), a non-circular system that has been shown to nevertheless be inconsistent by Girard:
+An example for a system that cannot be represented in the Lambda Cube is \(\lambda\textrm{U}\), a non-circular system that has been shown to nevertheless be inconsistent by Girard:
 
 \begin{align*}
 \lambda\textrm{U} \triangleq
@@ -628,9 +628,9 @@ An example for a system that cannot be represented in the \(\lambda\)-cube is \(
     \end{cases}
 \end{align*}
 
-Many lemmas and proofs follow, leading up the the proof of strong normalisation for all systems in the \(\lambda\)-cube.
+Many lemmas and proofs follow, leading up the the proof of strong normalisation for all systems in the Lambda Cube.
 
-Pure type system specification are general enough to also allow for logics in the logic cube (and not just typed lambda calculi from the \(\lambda\)-cube) to be considered as such. One example is propositional logic (PROP), which corresponds to \(\lambda^{\rightarrow}\) in the \(\lambda\)-cube. The specification looks remarkably similar to that of the type system: the latter can be obtained from the former by removing the superscripts.
+Pure Type System specification are general enough to also allow for logics in the Logic Cube (and not just typed lambda calculi from the Lambda Cube) to be considered as such. One example is propositional logic (PROP), which corresponds to \(\lambda^{\rightarrow}\) in the Lambda Cube. The specification looks remarkably similar to that of the type system: the latter can be obtained from the former by removing the superscripts.
 
 \begin{align*}
 \lambda\textrm{PROP} \triangleq
@@ -652,7 +652,7 @@ A more complex example is predicate logic (PRED), determined by the following sp
     \end{cases}
 \end{align*}
 
-The sorts of this pure type system are \(*^s\) for sets, \(*^p\) for propositions and~\(*^f\) for first-order functions between the sets in \(*^s\); \(\square^s\) contains \(*^s\) and \(\square^p\) contains \(*^p\). Note that there is no \(\square^f\) since PRED does not allow variables ranging over functions spaces. Its rules can be interpreted as follows:\footnote{For examples of how the \(\lambda\textrm{PRED}\) rules can be used, see \textcite[255]{barendregt_lambda_1992}}
+The sorts of this Pure Type System are \(*^s\) for sets, \(*^p\) for propositions and~\(*^f\) for first-order functions between the sets in \(*^s\); \(\square^s\) contains \(*^s\) and \(\square^p\) contains \(*^p\). Note that there is no \(\square^f\) since PRED does not allow variables ranging over functions spaces. Its rules can be interpreted as follows:\footnote{For examples of how the \(\lambda\textrm{PRED}\) rules can be used, see \textcite[255]{barendregt_lambda_1992}}
 
 \begin{description}
 \item[\((*^p,*^p)\)] allows the formation of implication.
@@ -738,7 +738,7 @@ The sorts of this pure type system are \(*^s\) for sets, \(*^p\) for proposition
             \BinaryInfC{\(\Gamma \vdash (\Pi x:A.B):s_3\)}
         \end{prooftree}
     \end{minipage}
-    \caption{Axiom and typing judgements of pure type systems. The application, abstraction and conversion rules (greyed out) are exactly the same as those for the \(\lambda\)-cube. The product rule generalises the \(\lambda\)-cube's \((s_1, s_2)\) rules.}
+    \caption{Axiom and typing judgements of Pure Type Systems. The application, abstraction and conversion rules (greyed out) are exactly the same as those for the Lambda Cube. The product rule generalises the Lambda Cube's \((s_1, s_2)\) rules.}
     \label{fig:pts-typing}
 \end{figure}
 
