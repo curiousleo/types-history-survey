@@ -56,7 +56,7 @@
 \maketitle
 
 \abstract{%
-In order to make automated reasoning possible, we need to represent our propositions and proofs in a way that computers can read and manipulate. Lambda calculi have been used to build such representations with great success.
+In order to perform automated reasoning, we need to represent our propositions and proofs, define the deduction rules of our theory and automate the process of finding and checking proofs as much as possible. Via the Curry-Howard correspondence, terms and types in typed lambda calculi can be used to represent proofs and propositions, respectively.
 
 In this survey, I review a selection of influential publications on the correspondence between various flavours of the lambda calculus and the propositions and proofs they allow us to represent.%
 }
@@ -69,6 +69,20 @@ In this survey, I review a selection of influential publications on the correspo
 \newpage
 
 \section{Introduction}
+
+How can type theory help build automated reasoning tools? Fundamentally, to do automated reasoning in a mathematical logic (as opposed to, say, common sense reasoning), three components are required:
+
+\begin{description}
+\item[Propositions and proofs] need to be represented within the system. In typed lambda calculi, propositions are represented as types and lambda terms correspond to proofs.
+\item[Deduction rules] must be defined. Typing rules play this role in typed lambda calculi. Logics that can be represented in this way include intuitionistic propositional and predicate logics of various kinds (see \cref{sec:power}) as well as classical logics (see \cref{ssc:parigot}).
+\item[Automation] makes the proof writer's job easier. There are several approaches to automation in different proof assistants based on the Curry-Howard correspondence. Some use \emph{tactics}, a technique known from proof assistants not based on type theory.\footnote{Coq, a proof assistant based on dependent type theory, uses tactics to automate the search for proofs.} Others allow for interactive refinement of terms/proofs in a development environment.\footnote{Agda, for example, can search for terms (proofs) in the current scope that have a certain type (prove a given proposition).}
+\end{description}
+
+One property that all the type theories in this survey have in common is that \emph{type checking} is decidable: given a term and a type, the type checker can always tell whether or not the term has this particular type. This translates to \enquote{proposition checking} via the Curry-Howard correspondence: in the logics corresponding to the type theories discussed here, we can always decide if a given proof actually proves a certain proposition.
+
+An advantage of using typed lambda calculi to represent logic is that by stripping away the types, we can easily extract lambda terms that can be executed, giving us verified software for free---this is usually referred to as the \emph{computational fragment} of the typed lambda calculus.
+
+\subsection{Basic notions and notation}
 
 Familiarity with some notions from logic and type theory will be assumed in later sections. To make this literature survey self-contained, I include a brief introduction here.
 
