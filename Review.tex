@@ -52,30 +52,46 @@
 %%% Body
 \begin{document}
 
-\thispagestyle{empty}
 \maketitle
 
+\vspace{0.4in}
+
 \abstract{%
-In order to perform automated reasoning, we need to represent our propositions and proofs, define the deduction rules of our theory and automate the process of finding and checking proofs as much as possible. Via the Curry-Howard correspondence, terms and types in typed lambda calculi can be used to represent proofs and propositions, respectively.
+In order to perform automated reasoning, we need to represent our propositions and proofs, define the deduction rules of our theory and automate the process of finding and checking proofs as much as possible. The Curry-Howard correspondence provides an appropriate mapping between type theory and logic which allows us to use representations and algorithms designed for typed lambda calculi to do automated reasoning.
 
 In this survey, I review a selection of influential publications on the correspondence between various flavours of the lambda calculus and the propositions and proofs they allow us to represent.%
 }
+\thispagestyle{empty}
 
-%\tableofcontents
-\vspace{10pt}
-\makeatletter
-\@starttoc{toc}
-\makeatother
+\vspace{1in}
+
+\begin{figure}[h]
+\begin{equation*}
+\xymatrix@R46pt@C40pt{%
+&\lambda\omega\ar@{->}[rr]&&\lambda\textrm{C} \\
+\lambda\textrm{2}\ar@{->}[rr]\ar@{->}[ur]&&\lambda\textrm{P2}\ar@{->}[ur] \\
+&\lambda\underline{\omega}\ar@{->}[uu]|!{"2,1";"2,3"}\hole\ar@{->}[rr]|!{"4,3";"2,3"}\hole&&\lambda\textrm{P}\underline{\omega}\ar@{->}[uu] \\
+\lambda^{\rightarrow}\ar@{->}[uu]\ar@{->}[rr]\ar@{->}[ur]&&\lambda\textrm{P}\ar@{->}[uu]\ar@{->}[ur]
+}
+\end{equation*}
+\end{figure}
+
+\newpage
+\tableofcontents
+%\vspace{10pt}
+%\makeatletter
+%\@starttoc{toc}
+%\makeatother
 \newpage
 
 \section{Introduction}
 
-How can type theory help build automated reasoning tools? Fundamentally, to do automated reasoning in a mathematical logic (as opposed to, say, common sense reasoning), three components are required:
+How can type theory help build automated reasoning tools? Fundamentally, to do automated reasoning in a mathematical logic (as opposed to, say, common-sense reasoning), three components are required:
 
 \begin{description}
 \item[Propositions and proofs] need to be represented within the system. In typed lambda calculi, propositions are represented as types and lambda terms correspond to proofs.
 \item[Deduction rules] must be defined. Typing rules play this role in typed lambda calculi. Logics that can be represented in this way include intuitionistic propositional and predicate logics of various kinds (see \cref{sec:power}) as well as classical logics (see \cref{ssc:parigot}).
-\item[Automation] makes the proof writer's job easier. There are several approaches to automation in different proof assistants based on the Curry-Howard correspondence. Some use \emph{tactics}, a technique known from proof assistants not based on type theory.\footnote{Coq, a proof assistant based on dependent type theory, uses tactics to automate the search for proofs.} Others allow for interactive refinement of terms/proofs in a development environment.\footnote{Agda, for example, can search for terms (proofs) in the current scope that have a certain type (prove a given proposition).}
+\item[Automation] makes the proof writer's job easier. There are several approaches to automation in different proof assistants based on the Curry-Howard correspondence. Some use \emph{tactics}, a technique known from proof assistants not based on type theory.\footnote{Coq (\url{http://coq.inria.fr}), a proof assistant based on dependent type theory, uses tactics to automate the search for proofs.} Others allow for interactive refinement of terms/proofs in a development environment.\footnote{Agda (\url{http://wiki.portal.chalmers.se/agda/pmwiki.php}) can search for terms (proofs) in the current scope that have a certain type (prove a given proposition).}
 \end{description}
 
 One property that all the type theories in this survey have in common is that \emph{type checking} is decidable: given a term and a type, the type checker can always tell whether or not the term has this particular type. This translates to \enquote{proposition checking} via the Curry-Howard correspondence: in the logics corresponding to the type theories discussed here, we can always decide if a given proof actually proves a certain proposition.
@@ -203,12 +219,12 @@ Howard starts by noting that the rule which introduces an implication on the rig
 
 This simple logic is then extended to include negation as functions with the empty type as their codomain, conjunction as pairing, and disjunction as what would today be called sum types. These corresponding notions from logic and type theory are listed in \cref{tab:howard}. The second part of the essay is concerned with constructing a set-theoretic interpretation of Heyting arithmetic including existential and universal quantifiers.
 
-\subsection{De Bruijn's Automath project}
+\subsection{Automath}
 
 In the same book that Howard published his notes in, Nicolaas de Bruijn describes his project \enquote{to develop a system of writing entire mathematical theories in such a precise fashion that verification of the correctness can be carried out by formal operations on the text}, with the goal to use computers for verifying proofs \autocite{de_bruijn_survey_1980}. The implementation of his Automath system is first motivated by describing how automated proof checking would benefit working mathematicians.
 % it would increase confidence in the results; it would help in understanding proofs by requiring explicit assumptions; and it would allow for proofs to be processed like any other object in computer memory---one could, for example, find out whether a certain axiom or rule was used in a proof.
 
-Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some intuition for what he calls the \enquote{idea of \emph{propositions as types}} as applied to implication: given propositions \(p\) and \(q\), a proof of the implication \(p \rightarrow q\) can be interpreted as a procedure by which a proof of \(q\) is generated for any \(p\) passed to it.\footnote{This interpretation of intuitionistic logic was originally proposed by Brouwer and Heyting and independently by Kolmogorov and is part of what is commonly referred to as the Brouwer-Heyting-Kolmogorov interpretation.} Later sections of the report discuss the potential benefits of introducing a proposition sort (\enquote{expression of degree 1}), and some ideas about what would nowadays be called \emph{tactics}. Both have been realised in the proof assistant Coq, for example.\footnote{\url{http://coq.inria.fr}}
+Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some intuition for what he calls the \enquote{idea of \emph{propositions as types}} as applied to implication: given propositions \(p\) and \(q\), a proof of the implication \(p \rightarrow q\) can be interpreted as a procedure by which a proof of \(q\) is generated for any \(p\) passed to it.\footnote{This interpretation of intuitionistic logic was originally proposed by Brouwer and Heyting and independently by Kolmogorov and is part of what is commonly referred to as the Brouwer-Heyting-Kolmogorov interpretation.} Later sections of the report discuss the potential benefits of introducing a proposition sort (\enquote{expression of degree 1}), and some ideas about what would nowadays be called \emph{tactics}. Both have been realised in the proof assistant Coq, for example.
 
 \begin{table}[h]
     \centering
@@ -239,7 +255,7 @@ This makes untangling the development of the subject \emph{a posteriori} difficu
 
 In this survey, I usually cite and describe the latest of such a series of publications on a particular topic by a particular author or set of authors.
 
-\subsection{Martin-Löf's Intuitionistic Type Theory}
+\subsection{Intuitionistic Type Theory}
 
 A set of notes from a lecture series given by Per Martin-Löf in 1980 is the canonical reference for \emph{Intuitionistic Type Theory} (often referred to as \enquote{Martin-Löf type theory}), on which most of the following work discussed in this survey is based \autocite{sambin_intuitionistic_1984}.
 
@@ -308,7 +324,7 @@ Considering these from the perspective of logic, formation rules are used to for
     \label{tab:martin-loef}
 \end{table}
 
-\subsection{Coquand and Huet's Calculus of Constructions}
+\subsection{Calculus of Constructions}
 
 Coquand and Huet's \emph{Calculus of Constructions} blends together the theoretical work by Martin-Löf and Girard with the more concrete proposals of de Bruijn \autocite{coquand_calculus_1988}. They first describe the metatheory of the calculus and then provide suggestions concerning how such a calculus could be implemented in a user-friendly way.
 
@@ -323,7 +339,7 @@ An interpretation (or semantics) of terms is given: contexts map to products, fo
 The section concerned with making the Calculus of Constructions user-friendly makes three concrete proposals: allowing local definitions (constants) via a \textit{let} construct;\footnote{\textcite{severi_pure_1994} shows that global and local definitions like \emph{let} preserve normalisation for many Pure Type Systems (see \cref{ssc:pts}), including the Calculus of Constructions.} making type arguments which can be inferred from other arguments implicit; and providing a way to extend the syntax of the language. As an example for the last suggestion, a composition operator is introduced as a syntax extension.
 
 
-\subsection{Luo's Extended Calculus of Constructions}
+\subsection{Extended Calculus of Constructions}
 
 The \emph{Extended Calculus of Constructions} (ECC), first presented by Zhaohui Luo in 1989\autocite{luo_ecc_1989}, expanded upon in his PhD thesis\autocite{luo_extended_1990} and used as the basis for his unified type theory in \citetitle{luo_computation_1994}\autocite{luo_computation_1994},
 
@@ -374,7 +390,7 @@ Instead, he proposes to use \(\Sigma\)-types to represent theories in an abstrac
 
 The signature presentation and the axiom can be packaged together as \[\textit{Mod}_{sg} \triangleq \Sigma s : \textit{Sig}_{sg}. \textit{Ax}_{sg}(s)\] which then represents a complete abstract theory of semigroups. In order to postulate an arbitrary semigroup, one just assumes a context \(\Gamma'_{sg} \triangleq sg : \textit{Mod}_{sg}\). Theorems over any semigroup (abstract theorems) then constitute a predicate \(\textit{Thm}_{sg}\) over \(\textit{Sig}_{sg}\) with the general form \[\textit{Thm}_{sg} \triangleq \lambda s : \textit{Sig}_{sg}. P_1 \wedge P_2 \wedge \dots \wedge P_n\] where \(P_1\) to \(P_n\) are the types corresponding to the theorems that have been proved. Given any concrete semigroup structure, \(\textit{Prf}_{sg}\), a term of type \(\Pi sg : \textit{Mod}_{sg}. \textit{Thm}_{sg}(\pi_1(sg))\), results in the proofs specialised to that particular semigroup structure.
 
-\subsection{Pfenning and Paulin-Mohring's Calculus of Inductive Constructions}
+\subsection{Calculus of Inductive Constructions}
 
 \textcite{pfenning_inductively_1990} extends the Calculus of Constructions with inductively defined types to create the Calculus of Inductive Constructions. Interestingly, this extension does not augment the computational capabilities of the calculus, it only makes the proof language more powerful: primitive recursion realises proof by induction, and primitive recursion is already definable in the computational fragment of the Calculus of Constructions, F\(\omega\).
 % XXX blah about predecessor function efficiency and distinguishing 0 from 1
@@ -420,11 +436,11 @@ For every constructor (\textit{nil} and \textit{cons} in this case), there is a 
 
 \section{Uniform formalisations of the Curry-Howard correspondence}
 
-\subsection{\label{ssc:cubes}Barendregt's Lambda Cube and the Logic Cube}
+\subsection{\label{ssc:cubes}Lambda Cube and Logic Cube}
 
 In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in volume 2 of the \textit{Handbook of Logic in Computer Science}, Henk Barendregt sets out to uniformly describe eight type systems, with the Calculus of Constructions the most powerful \autocite{barendregt_lambda_1992}. The result is the Lambda Cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the Lambda Cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
 
-\begin{figure}
+\begin{figure}[h]
 \begin{equation*}
 \xymatrix@R46pt@C40pt{%
 &\lambda\omega\ar@{->}[rr]&&\lambda\textrm{C} \\
@@ -504,7 +520,7 @@ There are general rules which apply to all systems and the specific rules called
 \end{table}
 \end{enumerate}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{minipage}[b]{.3\linewidth}
         \begin{prooftree}
@@ -583,9 +599,7 @@ The description of the Lambda Cube is followed by many examples of what kinds of
 
 \enquote{Weakly higher-order logics} have variables for higher-order propositions or predicates but no quantification over them. Again, the edges of the cube represent inclusion.
 
-The correspondence between the two cubes is a generalised version of the Curry-Howard interpretation: each formula \(A\) in logic \(L_i\) on the Logic Cube can be interpreted as a type \(\llbracket A \rrbracket\) in the corresponding system \(\lambda_i\) on the Lambda Cube. If \(A\) is provable in \(L_i\) then \(\llbracket A \rrbracket\) is inhabited in \(\lambda_i\) (soundness).\footnote{Barendregt quotes Geuvers' Master thesis from 1988 for this result. Unfortunately I was unable to track it down.} Completeness (inhabitation of \(\llbracket A \rrbracket\) implies \(A\) is provable) holds for propositional logics but not in general for predicate logics. For example, completeness for PRED\(\omega\) (higher-order logic) with respect to \(\lambda\)C (Calculus of Constructions) fails.
-
-\begin{figure}
+\begin{figure}[h]
 \begin{equation*}
 \xymatrix@R46pt@C16pt{%
 &\textrm{PROP}\omega\ar@{->}[rr]&&\textrm{PRED}\omega \\
@@ -597,6 +611,8 @@ The correspondence between the two cubes is a generalised version of the Curry-H
 \caption{The Logic Cube.}
 \label{fig:l-cube}
 \end{figure}
+
+The correspondence between the two cubes is a generalised version of the Curry-Howard interpretation: each formula \(A\) in logic \(L_i\) on the Logic Cube can be interpreted as a type \(\llbracket A \rrbracket\) in the corresponding system \(\lambda_i\) on the Lambda Cube. If \(A\) is provable in \(L_i\) then \(\llbracket A \rrbracket\) is inhabited in \(\lambda_i\) (soundness).\footnote{Barendregt quotes Geuvers' Master thesis from 1988 for this result. Unfortunately I was unable to track it down.} Completeness (inhabitation of \(\llbracket A \rrbracket\) implies \(A\) is provable) holds for propositional logics but not in general for predicate logics. For example, completeness for PRED\(\omega\) (higher-order logic) with respect to \(\lambda\)C (Calculus of Constructions) fails.
 
 \begin{table}[h]
     \centering
@@ -692,7 +708,7 @@ The sorts of this Pure Type System are \(*^s\) for sets, \(*^p\) for proposition
 \item[\((*^s,*^f,*^f)\)] allows the formation of curried functions of several arguments in the basic sets.
 \end{description}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{minipage}[b]{.4\linewidth}
         \begin{prooftree}
@@ -772,11 +788,11 @@ The sorts of this Pure Type System are \(*^s\) for sets, \(*^p\) for proposition
     \label{fig:pts-typing}
 \end{figure}
 
-\section{Classical and modal logics}
+\section{Classical logics}
 
-\subsection{\label{ssc:parigot}Parigot's \(\lambda\mu\)-calculus}
+\subsection{\label{ssc:parigot}Control operators and the \(\lambda\mu\)-calculus}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{minipage}[b]{.3\linewidth}
         \begin{prooftree}
@@ -849,7 +865,7 @@ The typing axiom and rules of the \(\lambda\mu\)-calculus correspond to classica
 \item The typing rules are given in \cref{fig:lambda-mu-typing}.
 \end{enumerate}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \begin{minipage}[b]{.3\linewidth}
         \begin{prooftree}
@@ -906,7 +922,7 @@ Proofs of subject reduction, confluence and strong normalisation follow. The cha
 
 \section{Conclusions and outlook}
 
-In this survey, I have traced the history of the Curry-Howard correspondence from its discovery in 1969 to the formulation of unifying theories of types for higher-order logics in the early and mid-1990s. Unfortunately, a number of interesting branches of this story had to be omitted in this survey for lack of space. For example, \textcite{moggi_notions_1994} shows how modal logics can be represented by type theories which include \emph{strong monads}.
+In this survey, I have traced the history of the Curry-Howard correspondence from its discovery in 1969 to the formulation of unifying theories of types for higher-order logics in the early and mid-1990s. Unfortunately, a number of interesting branches of this story had to be omitted in this survey for lack of space. For example, \textcite{moggi_notions_1991} shows how modal logics can be represented by type theories which include \emph{strong monads}.
 
 More generally speaking, the interaction of automated reasoning and type theory with category theory and programming language semantics has mostly been glossed over in this literature review.
 
