@@ -172,7 +172,7 @@ According to Thierry Coquand's article on type theory in the Stanford Encycloped
 
 \subsection{Howard on the Curry-Howard correspondence}
 
-William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this suprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence.
+William Howard coined the slogan \enquote{formulae as types} in a set of notes privately circulated in 1969. They appeared as an essay in a book dedicated to Haskell B. Curry on the occasion of his 80th birthday in 1980 \autocite{howard_formulae-as-types_1980}. By this point, the idea of a correspondence between types and propositions had become widely accepted and research into this surprising connection was well under way. Still, this essay is often cited as the publication that originated what became known as the Curry-Howard correspondence.
 
 As an aside, this correspondence is sometimes called Curry-Howard \emph{isomorphism} instead. In my opinion this is misleading: corresponding logics and typed lambda calculi are not always isomorphic. For example, the logic PRED\(\omega\) corresponds to the typed lambda calculus \(\lambda\)C in Barendregt's Lambda Cube / Logic Cube model (see \cref{ssc:cubes}). But completeness of PRED\(\omega\) with respect to \(\lambda\)C fails, so there are inhabited types in \(\lambda\)C corresponding to unprovable propositions in PRED\(\omega\)---in this instance, no full isomorphism exists \autocite[250]{barendregt_lambda_1992}.
 
@@ -201,9 +201,7 @@ Howard starts by noting that the rule which introduces an implication on the rig
 \end{figure}
 
 
-This simple
-% (positive implicational propositional)
-logic is then extended to include negation as functions with the empty type as their codomain, conjunction as pairing, and disjunction as what would today be called sum types. These corresponding notions from logic and type theory are listed in \cref{tab:howard}. The second part of the essay is concerned with constructing a set-theoretic interpretation of Heyting arithmetic including existential and universal quantifiers.
+This simple logic is then extended to include negation as functions with the empty type as their codomain, conjunction as pairing, and disjunction as what would today be called sum types. These corresponding notions from logic and type theory are listed in \cref{tab:howard}. The second part of the essay is concerned with constructing a set-theoretic interpretation of Heyting arithmetic including existential and universal quantifiers.
 
 \subsection{De Bruijn's Automath project}
 
@@ -231,7 +229,7 @@ Under the heading \enquote{use of typing for reasoning}, de Bruijn gives some in
 \end{table}
 
 
-\section{More powerful type systems emerge}
+\section{\label{sec:power}More powerful type systems emerge}
 
 Howard's manuscript was only the beginning: in the decades following the discovery of the correspondence between types theory and logic, researchers found many more concepts that translate both ways between the two frameworks.
 
@@ -378,7 +376,7 @@ The signature presentation and the axiom can be packaged together as \[\textit{M
 
 \subsection{Pfenning and Paulin-Mohring's Calculus of Inductive Constructions}
 
-\textcite{pfenning_inductively_1990} extends the Calculus of Constructions with inductively defined types. Interestingly, this extension does not augment its computational capabilities, it only makes the proof language more powerful: primitive recursion realises proof by induction, and primitive recursion is already definable in the computational fragment of the Calculus of Constructions, F\(\omega\).
+\textcite{pfenning_inductively_1990} extends the Calculus of Constructions with inductively defined types to create the Calculus of Inductive Constructions. Interestingly, this extension does not augment the computational capabilities of the calculus, it only makes the proof language more powerful: primitive recursion realises proof by induction, and primitive recursion is already definable in the computational fragment of the Calculus of Constructions, F\(\omega\).
 % XXX blah about predecessor function efficiency and distinguishing 0 from 1
 
 A short introduction to the Calculus of Constructions is given before defining the syntax for inductively defined types. Many examples follow, including a definition of natural numbers (see \cref{fig:nat-inductive-type}) and lists (see \cref{fig:list-inductive-type}).
@@ -414,18 +412,17 @@ end
 The definition of an inductive type \(\alpha\) can be thought of as a rule for \(\alpha\)-introduction. The corresponding \(\alpha\)-elimination is done via \emph{primitive recursion over \(\alpha\)}. The schema for lists, for example, is given by
 
 \begin{align*}
-f A (\textit{nil}\;A) &= h'_1\;A \\
-f A (\textit{cons}\;A\;x\;l) &= h'_2\;A\;x\;(\textit{pair}\;l\;(f\;A\;l))
+f A (\textit{nil}\;A) \quad &= \quad h'_1\;A \\
+f A (\textit{cons}\;A\;x\;l) \quad &= \quad h'_2\;A\;x\;(\textit{pair}\;l\;(f\;A\;l))
 \end{align*}
 
-XXX concluding remarks
-
+For every constructor (\textit{nil} and \textit{cons} in this case), there is a corresponding equation. Taken together, they define primitive recursion over this type.
 
 \section{Uniform formalisations of the Curry-Howard correspondence}
 
 \subsection{\label{ssc:cubes}Barendregt's Lambda Cube and the Logic Cube}
 
-In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in the Handbook of Logic in Computer Science, vol. 2, Henk Barendregt sets out to uniformly describe eight type systems, with the Calculus of Constructions the most powerful \autocite{barendregt_lambda_1992}. The result is the Lambda Cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the Lambda Cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
+In the last section of his 191-page chapter \citetitle{barendregt_lambda_1992} in volume 2 of the \textit{Handbook of Logic in Computer Science}, Henk Barendregt sets out to uniformly describe eight type systems, with the Calculus of Constructions the most powerful \autocite{barendregt_lambda_1992}. The result is the Lambda Cube shown in \cref{fig:lambda-cube}, where edges (\(X \longrightarrow Y\)) represent the inclusion relation \(X \subseteq Y\). The type systems in the Lambda Cube are labelled using Barendregt's own naming scheme. Most of them had already appeared in previous work---see \cref{tab:lambda-cube-type-systems}.
 
 \begin{figure}
 \begin{equation*}
@@ -624,7 +621,7 @@ The correspondence between the two cubes is a generalised version of the Curry-H
 
 \subsection{\label{ssc:pts}Pure Type Systems}
 
-Berardi and Terlouw independently generalised the framework of the Lambda Cube to what \textcite{barendregt_lambda_1992} calls \emph{Pure Type Systems}. It accomodates all the systems in the Lambda Cube and allows subtle differences between many more type systems to be described in a succinct manner. Pure Type Systems have been implemented in the proof checker LEGO amongst others \autocite{pollack_theory_1994}. The definition given here follows \textcite[213f.]{barendregt_lambda_1992}:
+Berardi and Terlouw independently generalised the framework of the Lambda Cube to what \textcite{barendregt_lambda_1992} calls \emph{Pure Type Systems}. It accommodates all the systems in the Lambda Cube and allows subtle differences between many more type systems to be described in a succinct manner. Pure Type Systems have been implemented in the proof checker LEGO amongst others \autocite{pollack_theory_1994}. The definition given here follows \textcite[213f.]{barendregt_lambda_1992}:
 
 \begin{enumerate}
 \item Pure Type Systems have the same abstract syntax as those in the Lambda Cube.
@@ -661,7 +658,7 @@ An example for a system that cannot be represented in the Lambda Cube is \(\lamb
     \end{cases}
 \end{align*}
 
-Many lemmas and proofs follow, leading up the the proof of strong normalisation for all systems in the Lambda Cube.
+Many lemmas and proofs follow, leading up the proof of strong normalisation for all systems in the Lambda Cube.
 
 Logics in the Logic Cube can be considered as Pure Type Systems too. One example is propositional logic (PROP), which corresponds to \(\lambda^{\rightarrow}\) in the Lambda Cube. The specification of PROP looks remarkably similar to that of \(\lambda^{\rightarrow}\): the latter can be obtained from the former by removing the superscripts.
 
@@ -777,7 +774,7 @@ The sorts of this Pure Type System are \(*^s\) for sets, \(*^p\) for proposition
 
 \section{Classical and modal logics}
 
-\subsection{Parigot's \(\lambda\mu\)-calculus}
+\subsection{\label{ssc:parigot}Parigot's \(\lambda\mu\)-calculus}
 
 \begin{figure}
     \centering
